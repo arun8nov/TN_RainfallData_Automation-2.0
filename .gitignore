@@ -1,0 +1,15 @@
+# Python Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local environment/IDE config
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

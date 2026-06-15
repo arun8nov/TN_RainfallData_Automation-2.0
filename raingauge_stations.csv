@@ -1,0 +1,565 @@
+Sl.No,Name of the station,District/Taluk/Revenue Village,Started on,Latitude,Longitude,Status of station
+1,"Taluk Office, Andimadam",Ariyalur Andimadam ANDIMADAM,20-01-2021,11.3354,79.3741,Working
+2,Ariyalur Taluk Office,Ariyalur Ariyalur ARIYALUR (S),21-11-2019,11.14,79.077,Working
+3,Kuruvadi,Ariyalur Ariyalur KURUVADI,16-12-2022,10.9728,79.2347,Working
+4,THIRUMANUR PWD OFFICE (R.C.DIVISION),Ariyalur Ariyalur THIRUMANUR,21-11-2019,10.9333,79.1,Working
+5,"PWD Office, Sendurai",Ariyalur Sendurai SENDHURAI,21-11-2019,11.2539,79.1763,Working
+6,Jayankondam taluk office,Ariyalur Udayarpalayam JAYAKONDASOLAPURAM,21-11-2019,11.2167,79.3666,Working
+7,Suthamalli dam,Ariyalur Udayarpalayam NADUVALUR(E),16-12-2022,11.041,79.1842,Working
+8,T.Palur Panchayat Union 0ffice,Ariyalur Udayarpalayam T. PALUR,26-11-2023,11.2388,79.4788,Working
+9,Chengalpattu,Chengalpattu Chengalpattu CHENGALPATTU,01-01-2014,12.6745,79.9774,Working
+10,Cheyyur,Chengalpattu Cheyyur CHEYYUR B,01-01-2012,12.3525,79.9995,Working
+11,Madurantakam taluk office,Chengalpattu Madhurantakam MADURANTHAKAM-PART I,01-01-2003,12.4991,79.8752,Working
+12,"Taluk Office, Tambaram",Chengalpattu Tambaram KADAPERI,24-10-2016,12.935,80.1269,Working
+13,Mammallapuram PWD bungalow,Chengalpattu Thirukkalukundram MAMALLAPURAM,01-01-1994,12.616,80.1878,Working
+14,"Taluk Office, Thirukalukundram",Chengalpattu Thirukkalukundram THIRUKALUKUNDRAM,01-10-2013,12.6161,80.1888,Working
+15,Keelampakkam,Chengalpattu Thirupporur KELAMPAKKAM,01-01-1940,12.7803,80.2294,Working
+16,"Taluk Office, Thiruporur",Chengalpattu Thirupporur THIRUPPORUR,23-09-2016,12.7201,80.1862,Working
+17,Alandur,Chennai Alandur MEENAMBAKKAM,25-10-2019,12.9975,80.2006,Working
+18,Ambathur,Chennai Ambattur Ambattur,25-10-2019,13.1095,80.149,Working
+19,Ayanavaram taluk office,Chennai Ayanavaram Ayanavaram (Part 1),25-10-2019,13.0883,80.2318,Working
+20,Chennai nungambakkam,Chennai Egmore Nungambakkam,25-10-2019,13.0667,80.25,Working
+21,Anna university,Chennai Guindy Kottur,25-10-2019,13.0092,80.2342,Working
+22,Gov hr sec school MGR Nagar,Chennai Mambalam Saligramam,25-10-2019,13.0331,80.2027,Working
+23,DGP Office,Chennai Mylapore Mylapore (Part 1),25-10-2019,13.05,80.2333,Working
+24,Perambur Corporation park,Chennai Perambur Perambur (Part 3),25-10-2019,13.0965,80.2922,Working
+25,Chennai collectorate building,Chennai Pursawalkam V.O.C Nagar,25-10-2019,13.1282,80.2916,Working
+26,Sholinganallur,Chennai Sholinganallur CHOZHINGANALLUR-2,25-10-2019,12.8773,80.2277,Working
+27,CD Hospital Tondiarpet,Chennai Tondiarpet Tondiarpet (Part 2),25-10-2019,13.1093,80.2427,Working
+28,Aliyar,Coimbatore Anaimalai ANAIMALAI.,10-04-2000,11.0168,76.9558,Working
+29,"Taluk Office, Anaimalai",Coimbatore Anaimalai ANAIMALAI.,07-11-2022,10.582,76.934,Working
+30,Annur,Coimbatore Annur ANNUR METTUPALAYAM.,10-07-2001,11.2337,77.1029,Working
+31,Airport Peelamedu,Coimbatore Coimbatore north KALAPATTY (EAST),16-05-1995,11.0748,77.0035,Working
+32,Periyanaickenpalayam,Coimbatore Coimbatore north PERIYANAIKANPALAYAM.,21-11-1992,11.1582,76.9528,Working
+33,T.N.A.U,Coimbatore Coimbatore north THELUNGUPALAYAM.,05-03-1989,11.0124,76.9357,Working
+34,Coimbatore South,Coimbatore Coimbatore south COIMBATORE OLD VILL. AND OL,15-04-2004,11.0009,76.9709,Working
+35,"Taluk Office, Kinathukkadavu",Coimbatore Kinathukadavu KINTHUKADAVU.,07-11-2022,10.822,77.016,Working
+36,"Railway Station, Podanur",Coimbatore Madukarai KURICHY.,07-11-2022,11.011,77.038,Working
+37,"Taluk Office, Madukkarai",Coimbatore Madukarai MADUKARAI.,07-11-2022,10.89,76.908,Working
+38,"Pillur Dam, Mettupalayam .",Coimbatore Mettupalayam NELLITHURAI.,07-11-2022,11.018,76.974,Working
+39,Mettupalayam,Coimbatore Mettupalayam SIKKADASAMPALAYAM,16-05-1990,11.2891,76.941,Working
+40,Siruvani Adivaram (Water Treatment Plant),Coimbatore Perur MADAVARAYAPURAM.,07-11-2022,10.963,76.681,Working
+41,"BDO, Thondamuthur",Coimbatore Perur THONDAMUTHUR.,07-11-2022,10.987,76.844,Working
+42,"PWD IB, (Inspection Bungalow), Makkinampatti.",Coimbatore Pollachi MAKKINAMPATTY,07-11-2022,10.656,77.032,Working
+43,"Taluk Office, Pollachi",Coimbatore Pollachi POLLACHI.,13-04-1988,10.6604,77.0073,Working
+44,Sulur,Coimbatore Sulur SULUR.,10-07-1990,11.0299,77.1227,Working
+45,"PWD office, Vaarappatti",Coimbatore Sulur VARAPATTY.,07-11-2022,10.869,77.191,Working
+46,Chinnakalar,Coimbatore Valparai ANAMALAI KUNDRUGAL.,15-11-1976,10.3374,76.9641,Working
+47,Cincona,Coimbatore Valparai ANAMALAI KUNDRUGAL.,19-10-1988,10.2877,76.9915,Working
+48,Sholayar,Coimbatore Valparai ANAMALAI KUNDRUGAL.,18-10-1976,10.2993,76.8814,Working
+49,"Taluk Office, Valparai",Coimbatore Valparai ANAMALAI KUNDRUGAL.,14-02-1976,10.3243,76.954,Working
+50,Valparai PAP,Coimbatore Valparai ANAMALAI KUNDRUGAL.,14-09-1976,10.3321,76.9609,Working
+51,Bhuvanagiri,Cuddalore Bhuvanagiri Mel Bhuvanagiri,08-09-1984,11.4418,79.6448,Working
+52,Parangipettai,Cuddalore Bhuvanagiri Parangipettai,16-03-1967,11.5,79.7666,Working
+53,Sethiyathope,Cuddalore Bhuvanagiri Sethiayathoppu,23-10-1999,11.434,79.5405,Working
+54,Chidambaram,Cuddalore Chidambaram Chidambaram (Municipal),01-03-2017,11.4004,79.6882,Working
+55,Annamalai Nagar,Cuddalore Chidambaram Thiruvakulam,25-08-1987,11.3893,79.7158,Working
+56,Indian Metrology Department,Cuddalore Cuddalore Manjakuppam,1894-06-01,11.7746,79.7674,Working
+57,Collectorate,Cuddalore Cuddalore Velisemmandalam,18-09-2017,11.7727,79.7561,Working
+58,Lalpet,Cuddalore Kattumannarkoil Lalpettai,01-10-1975,11.2984,79.5488,Working
+59,Kattumannarkoil,Cuddalore Kattumannarkoil Udaiyargudi,05-07-1910,11.2758,79.5511,Working
+60,Kothavacherry,Cuddalore Kurinjipadi Kothavachery,05-10-1905,11.5205,79.6352,Working
+61,Kurinjipadi,Cuddalore Kurinjipadi Rasakuppam,25-09-2017,11.5577,79.5693,Working
+62,Vadakuthu,Cuddalore Kurinjipadi Vadakuthu,01-10-2017,11.6063,79.5494,Working
+63,SRC Kudithangi,Cuddalore Panruti Kudithangi,20-08-2004,11.7779,79.6683,Working
+64,Vanamadevi,Cuddalore Panruti Palur,02-07-1957,11.7471,79.6363,Working
+65,Panruti,Cuddalore Panruti Panruti,09-05-1984,11.7628,79.5521,Working
+66,Srimushnam,Cuddalore Srimushanam Srimushnam,17-02-1980,11.4019,79.4011,Working
+67,Kilacheruvai,Cuddalore Titagudi Keezh cheruvaai,01-02-1980,11.414,79.098,Working
+68,Lakkur,Cuddalore Titagudi Lakkur,05-12-1972,11.4663,79.0186,Working
+69,Pelandurai,Cuddalore Titagudi Pelanthurai,10-05-1913,11.2763,79.5084,Working
+70,Tozhudur,Cuddalore Titagudi Ramanatham,01-02-1980,11.4062,79.0025,Working
+71,Kattumayilur,Cuddalore Veppur Kattumailur,04-07-1974,11.5814,79.1125,Working
+72,Me.Mathur,Cuddalore Veppur Me.Mathur,1868-07-01,11.5617,79.223,Working
+73,Veppur,Cuddalore Veppur Veppur,01-07-1990,11.5323,79.1239,Working
+74,Kuppanatham,Cuddalore Vridhachalam Kuppanatham,03-04-2001,11.5358,79.3545,Working
+75,Vridhachalam,Cuddalore Vridhachalam Vridhachalam,01-06-1978,11.5179,79.3347,Working
+76,Dharmapuri,Dharmapuri Dharmapuri VELLAIKKAVUNDANPALAIYAM,01-11-2012,12.1273,78.1629,Working
+77,Harur,Dharmapuri Harur HARUR,01-11-2012,12.058,78.4793,Working
+78,Subramania siva co.op sugar mill,Dharmapuri Harur VETRAPATTI,02-08-2023,12.125,78.3929,Working
+79,Palacode co.op.sugar mill,Dharmapuri Nallampalli ADAMANKOTTAI,02-08-2023,12.064,78.1158,Working
+80,Marandahalli TB,Dharmapuri Palacode MARANDAHALLI,01-11-2012,12.3855,78.0021,Working
+81,Palacode,Dharmapuri Palacode PALAKODU,01-11-2012,12.2988,78.0739,Working
+82,"Taluk office, Pappireddipatti",Dharmapuri Pappireddipatti PAPPIREDDIPATTY,01-11-2012,11.9206,78.3655,Working
+83,Hogenakkal Forest tb,Dharmapuri Pennagaram Koothapadi,01-11-2012,12.1185,77.7817,Working
+84,Pennagaram,Dharmapuri Pennagaram Pennagaram,01-11-2012,12.1344,77.8937,Working
+85,Dindigul,Dindigul Dindigul west Chettinaickenpatty,01-01-1971,10.35,77.9667,Working
+86,Kamatchipuram,Dindigul Dindigul west Kamatchipuram,01-01-1973,10.4272,77.834,Working
+87,Kodaikanal,Dindigul Kodaikanal Kodaikanal,1899-01-01,10.2333,77.4667,Working
+88,Kodaikanal boat club,Dindigul Kodaikanal Kodaikanal,1890-01-01,10.2338,77.4864,Working
+89,Natham,Dindigul Natham Natham,01-01-1972,10.2302,78.2227,Working
+90,Nilakottai,Dindigul Nilakottai Nilakottai,01-01-1976,10.1667,77.8522,Working
+91,Chatrapatti (Ottanchatram),Dindigul Oddenchatram Chatrapatty,1894-01-01,10.4686,77.6525,Working
+92,Palani,Dindigul Palani Palani,01-01-1971,10.4522,77.5167,Working
+93,TOBACCO STATION(VDR),Dindigul Vedasandur Vedasandur,01-01-1962,10.5302,77.9531,Working
+94,VEDASANDUR,Dindigul Vedasandur Vedasandur,01-01-1971,10.5167,77.9522,Working
+95,Ammapettai,Erode Anthiyur AMMAPETTAI,07-11-2022,11.37,77.44,Working
+96,Varattupallam,Erode Anthiyur BARGUR,07-11-2022,11.4,77.34,Working
+97,Bhavani,Erode Bhavani BHAVANI,1890-05-01,11.449,77.6839,Working
+98,Kavundapadi,Erode Bhavani KAVINDAPADI,07-11-2022,11.4248,77.3818,Working
+99,Erode,Erode Erode ERODE (B),1890-01-01,11.35,77.7167,Working
+100,Elanthakuttai Medu,Erode Gobichettipalayam KALINGIYAM (B),07-11-2022,11.4239,77.43,Working
+101,Kunderipallam,Erode Gobichettipalayam KONKARA PALAYAM (B),07-11-2022,11.5628,77.3685,Working
+102,Kodivery,Erode Gobichettipalayam PERIYAKODIVERI,07-11-2022,11.4729,77.2987,Working
+103,Gobichettipalayam,Erode Gobichettipalayam VEERAPANDI,08-11-1923,11.4667,77.4333,Working
+104,Kodumudi,Erode Kodumudi KODUMUDI (B),01-11-1976,11.0833,77.8667,Working
+105,Modakkurichi,Erode Modakkurichi ELUMATHUR,07-11-2022,11.2125,77.7757,Working
+106,Nambiyur,Erode Nambiyur NAMBIYUR,07-11-2022,11.3678,77.3232,Working
+107,Chennimalai,Erode Perundurai CHENNIMALAI,07-11-2022,11.1588,77.6032,Working
+108,Perundurai,Erode Perundurai PERUNDURAI,1889-11-01,11.2833,77.5833,Working
+109,Bhavanisagar,Erode Sathyamangalam MUDUKKANTHURAI,02-03-1954,11.4733,77.1303,Working
+110,Sathyamangalam,Erode Sathyamangalam SATHYAMANGALAM,02-03-1975,11.5,77.25,Working
+111,Thalavadi,Erode Thalavadi THALAVADI,02-03-1961,11.8041,77.0081,Working
+112,Gomugi Dam (PWD),Kallakurichi Chinnaselam KACHIRAYAPALAIYAM,07-11-2022,11.7654,78.8213,Working
+113,KCS MILL-2 Kachirayopalayam,Kallakurichi Chinnaselam KACHIRAYAPALAIYAM,18-10-2018,11.7453,78.8766,Working
+114,Kallakurichi,Kallakurichi Kallakurichi KALLAKURICHI,01-01-2011,11.7333,78.9333,Working
+115,DSCL Thiyadurugam,Kallakurichi Kallakurichi THIYAGAI,18-10-2017,11.7446,79.0744,Working
+116,DSCL Virugavoor,Kallakurichi Kallakurichi VIRUGAVOOR,18-10-2018,11.6861,79.0473,Working
+117,Sankarapuram,Kallakurichi Sankarapuram VADASIRUVALLUR,01-01-2011,11.8833,78.9167,Working
+118,DSCL Madampoondi,Kallakurichi Tirukkoilur MADAMPOONIDI,18-10-2018,11.9526,79.0952,Working
+119,TIRUKOILUR,Kallakurichi Tirukkoilur THIRUKOILUR (NORTH),01-01-2011,11.9667,79.2167,Working
+120,DSCL Thirupalapandal,Kallakurichi Tirukkoilur THIRUPALAPANTHAL,18-10-2018,11.9465,79.1329,Working
+121,BASL Vengur,Kallakurichi Tirukkoilur VENGUR,18-10-2018,11.8927,79.1857,Working
+122,SCS MILL Pillayarkuppam,Kallakurichi Ulundurpet AATHUR,18-10-2018,11.7917,79.3137,Working
+123,DSCL Eraiyur,Kallakurichi Ulundurpet ERAIYUR,18-10-2018,11.785,79.197,Working
+124,ULUNDURPET,Kallakurichi Ulundurpet U.KEERANUR,01-01-2011,11.6774,79.2885,Working
+125,KCS MILL-1 Ariyalur,Kallakurichi Vanapuram ARIYALUR,18-10-2018,11.9281,79.0069,Working
+126,KCS MILL-1 Kadavanur,Kallakurichi Vanapuram KADUVANUR,18-10-2017,11.9399,78.9526,Working
+127,DSCL Kalayanallur,Kallakurichi Vanapuram KALAIYANALLUR,18-10-2018,11.7726,79.0594,Working
+128,DSCL Keezhpadi,Kallakurichi Vanapuram KEEZHPADI,18-10-2018,11.8668,79.0766,Working
+129,BASL Manalurpet,Kallakurichi Vanapuram MANALURPETTAI,18-10-2018,12.0124,79.0927,Working
+130,KCS MILL-2 Moorarpalayam,Kallakurichi Vanapuram MAROOR,18-10-2018,11.8252,78.9456,Working
+131,KCS MILL-1 Moongilthuraipattu,Kallakurichi Vanapuram MUNGILDURAIPATTU,18-10-2018,12.0217,78.9881,Working
+132,DSCL Rishivandiyam,Kallakurichi Vanapuram RISHIVANTHIYAM,18-10-2018,11.8145,79.0971,Working
+133,DSCL Sulangurichi,Kallakurichi Vanapuram SOOLANGKURICHI,18-10-2018,11.804,79.0136,Working
+134,Manimutharu Dam (PWD),Kallakurichi Vanapuram SOOLANGKURICHI,07-11-2022,11.8145,78.9984,Working
+135,Ariyalur camp area,Kallakurichi Vanapuram VANAPURAM,07-11-2022,11.9272,79.011,Working
+136,Kancheepuram taluk office,Kancheepuram Kancheepuram KANCHEEPURAM,01-01-1994,12.8335,79.7021,Working
+137,"Taluk Office, Kundrathur",Kancheepuram Kundrathur KOLLACHERI,07-11-2022,13.003,80.0991,Working
+138,Chembarampakkam,Kancheepuram Kundrathur KUNRATHUR - A,01-01-1990,13.0042,80.0338,Working
+139,Sriperumbadur,Kancheepuram Sriperumbudur SRIPERUMBUDUR A,01-01-2007,12.9673,79.9467,Working
+140,UTHIRAMERUR,Kancheepuram Uthiramerur UTTHIRAMERUR,01-01-2009,12.6153,79.7561,Working
+141,Walajabad,Kancheepuram Walajabad WALAJABAD,01-01-2017,12.794,79.8169,Working
+142,Kannimar,Kanniyakumari Agastheeswaram KANNIYAKUMARI,01-01-2000,8.08399,77.547,Working
+143,Kottaram,Kanniyakumari Agastheeswaram KOTTARAM EAST,01-01-2000,8.11668,77.5255,Working
+144,Mylaudy,Kanniyakumari Agastheeswaram MYLAADY,01-01-2000,8.15,77.5,Working
+145,Nagercoil,Kanniyakumari Agastheeswaram NAGERCOIL SOUTH TOWN,01-01-1998,8.16667,77.45,Working
+146,Colachel,Kanniyakumari Kalkulam COLACHEL A,01-01-2000,8.17412,77.2501,Working
+147,Eraniel,Kanniyakumari Kalkulam ERANIEL,01-01-2000,8.2,77.3167,Working
+148,Thuckalay,Kanniyakumari Kalkulam KALKULAM,01-01-2000,8.24137,77.3191,Working
+149,Adayamadai,Kanniyakumari Kalkulam KUMARAPURAM,07-11-2022,8.30916,77.3136,Working
+150,Kurunthancode,Kanniyakumari Kalkulam KURUNTHANCODE A,07-11-2022,8.17812,77.3368,Working
+151,Kozhiporvilai,Kanniyakumari Kalkulam MULAGUMOODU,07-11-2022,8.24843,77.2886,Working
+152,Mambzhathuraiyaru,Kanniyakumari Kalkulam VILLUKKURI A,07-11-2022,8.2328,77.3785,Working
+153,Mullanginavilai,Kanniyakumari Killiyoor MULLANKINAVILAI,07-11-2022,8.26345,77.2355,Working
+154,Suralacode,Kanniyakumari Thiruvattar CHURULACODE,01-01-2000,8.3357,77.3796,Working
+155,Pechiparai,Kanniyakumari Thiruvattar PECHIPARAI,01-02-2000,8.43333,77.3167,Working
+156,Perunchani,Kanniyakumari Thiruvattar PERUNCHANI,01-01-1997,8.40028,77.4092,Working
+157,Anaikedanku,Kanniyakumari Thiruvattar PONMANAI A,07-11-2022,8.31241,77.2845,Working
+158,Thirparappu,Kanniyakumari Thiruvattar THIRPARAPPU,07-11-2022,8.3911,77.2594,Working
+159,Puthan dam,Kanniyakumari Thiruvattar THIRUVATTAR,01-01-2000,8.35779,77.3501,Working
+160,Aralvaimozhi,Kanniyakumari Thovalai ARALVOIMOZHY SOUTH,07-11-2022,8.1531,77.314,Working
+161,Bhoothapandy,Kanniyakumari Thovalai BOOTHAPANDY,01-01-1998,8.26667,77.4333,Working
+162,Mukkadal dam,Kanniyakumari Thovalai CHIRAMADAM,07-11-2022,8.28124,77.4142,Working
+163,Balamore,Kanniyakumari Thovalai THADIKARANKONAM,07-11-2022,8.2,77.23,Working
+164,Chittar I,Kanniyakumari Vilavancode ARUMANAI,01-01-1998,8.33711,77.2459,Working
+165,Sivalogam (Chittar II),Kanniyakumari Vilavancode ARUMANAI,01-01-2000,8.44859,77.2756,Working
+166,Kalial,Kanniyakumari Vilavancode KALIYAL,01-01-2000,8.46432,77.2441,Working
+167,Kuzhithurai,Kanniyakumari Vilavancode KUZHITHURAI TOWN,01-01-2000,8.31819,77.2062,Working
+168,Aravakurichi,Karur Aravakurichi ARAVAKURICHI,01-07-2000,10.7727,77.91,Working
+169,Anaippalayam,Karur Aravakurichi P.ANAIPALAYAM,01-07-1988,10.8597,77.9049,Working
+170,Kadavur,Karur Kadavur D.EDAYAPATTI(W),01-07-1930,10.5949,78.1915,Working
+171,Mylampatti,Karur Kadavur KEELAPAGUTHI,01-07-2004,10.7316,78.2453,Working
+172,Palaviduthi,Karur Kadavur PALAVIDUTHI,01-07-1976,10.6471,78.2323,Working
+173,Karur,Karur Karur L.N.SAMUDRAM,01-07-1977,10.9591,78.0784,Working
+174,Krishnarayapuram,Karur Krishnarayapuram KRISHNARAYAPURAM(N),01-07-1998,10.9579,78.2639,Working
+175,Mayanoor,Karur Krishnarayapuram MAYANOOR,01-07-1943,10.9563,78.2393,Working
+176,Panjapatti,Karur Krishnarayapuram PANCHAPATTI,01-07-2002,10.8298,78.3006,Working
+177,Kulithalai,Karur Kulithalai KULITHALAI,1889-07-01,10.9406,78.4209,Working
+178,Thogamalai,Karur Kulithalai THOGAMALAI,01-07-1987,10.726,78.4099,Working
+179,K.Paramathi,Karur Pugalur K.PARAMATHI,01-07-1971,10.9621,77.9059,Working
+180,Anchetty police station,Krishnagiri Anchetty ANCHETTY,12-12-2018,12.3507,77.7294,Working
+181,Denkanikotai,Krishnagiri Denkanikottai DENKANIKOTTA,10-12-2019,12.521,77.7912,Working
+182,Rayakottai,Krishnagiri Denkanikottai RAYAKOTTAH,10-12-2019,12.5118,78.0376,Working
+183,Thally,Krishnagiri Denkanikottai THALLI,10-12-2019,12.5841,77.6538,Working
+184,Kelavarapalli Dam,Krishnagiri Hosur AVALAPALLI,07-11-2022,12.767,77.8736,Working
+185,"Taluk Office, Hosur",Krishnagiri Hosur HOSUR,01-12-2019,12.7271,77.8276,Working
+186,"Taluk Office, Krishnagiri",Krishnagiri Krishnagiri BOGANAPALLI,10-12-2019,12.5254,78.2184,Working
+187,Nedungal,Krishnagiri Krishnagiri MARICHETTYHALLI - 2,10-12-2019,12.3424,78.221,Working
+188,KRP dam,Krishnagiri Krishnagiri PERIYAMUTHUR,07-11-2022,12.4731,78.1952,Working
+189,Barur,Krishnagiri Pochampalli BARUR,10-12-2019,12.3049,78.3066,Working
+190,Penukondapuram,Krishnagiri Pochampalli GENDIGAMPATTI,10-12-2019,12.3638,78.4227,Working
+191,Jambukuttapatti,Krishnagiri Pochampalli JAMBUKUTTAPPATTI,10-12-2019,12.32,78.36,Working
+192,Chinnar Dam,Krishnagiri Shoolagiri MARANDAPALLI,07-11-2022,12.6695,78.0422,Working
+193,BDO Shoolagiri,Krishnagiri Shoolagiri SHOOLAGIRI,10-12-2019,12.6624,78.012,Working
+194,Pambar Dam,Krishnagiri Uthangarai KOLLANUR,07-11-2022,12.2633,78.5634,Working
+195,Taluk Office Uthangarai,Krishnagiri Uthangarai UTTANGARAI,10-12-2019,12.2644,78.5333,Working
+196,Kallikudi,Madurai Kalligudi Kalligudi Bit 1,21-11-2019,9.69293,77.9724,Working
+197,Idayapatti,Madurai Madurai east Idayapatti,21-11-2019,9.94051,78.2765,Working
+198,Kallandri,Madurai Madurai east Kallandiri Bit 1,21-11-2019,10.039,78.2001,Working
+199,Chittampatti,Madurai Madurai east Thamaraipatti Bit 1,21-11-2019,9.98534,78.2391,Working
+200,Madurai north,Madurai Madurai north North Madurai,21-11-2019,9.93333,78.1167,Working
+201,Periyapatti,Madurai Madurai north Periyapatti,07-11-2022,10.0311,78.1586,Working
+202,TALLAKULAM,Madurai Madurai north Tallakulam,21-11-2019,9.9333,78.1322,Working
+203,Madurai airport,Madurai Madurai south Avaniyapuram,21-11-2019,9.8382,78.0895,Working
+204,VIRAGANUR,Madurai Madurai south Virathanur,21-11-2019,9.90121,78.1608,Working
+205,Melur,Madurai Melur Melur Town,21-11-2019,10.0313,78.3382,Working
+206,THANIAMANGALAM,Madurai Melur Thaniyamangalam,21-11-2019,9.99551,78.3909,Working
+207,Pulipatti,Madurai Melur Vellalur,21-11-2019,10.0856,78.2907,Working
+208,Elumalai,Madurai Peraiyur Elumalai,07-11-2022,9.85954,77.6968,Working
+209,Peraiyur,Madurai Peraiyur Peraiyur Bit 1,21-11-2019,9.73833,77.7899,Working
+210,TIRUMANGALAM,Madurai Tirumangalam Thirumangalam,21-11-2019,9.83186,77.9861,Working
+211,Kuppanampatti,Madurai Usilampatti Sinthupatti,21-11-2019,9.9494,77.8464,Working
+212,USILAMPATTI,Madurai Usilampatti Usilampatti,21-11-2019,9.96592,77.7864,Working
+213,Sathiar,Madurai Vadipatti Konappatti,21-11-2019,10.1127,78.0787,Working
+214,Sholavandan,Madurai Vadipatti Sholavandan,21-11-2019,10.0225,77.9631,Working
+215,Taluk Office ANDIPATTI,Madurai Vadipatti T.Andipatti,21-11-2019,10.0622,77.9846,Working
+216,VADIPATTI,Madurai Vadipatti Thathampatti,21-11-2019,10.0711,77.9769,Working
+217,Mettupatti,Madurai Vadipatti Vavida Maruthur,21-11-2019,10.1118,78.0449,Working
+218,Manalmedu,Mayiladuthurai Mayiladuthurai Manalmedu,01-06-1991,11.2005,79.6014,Working
+219,Mayiladuthurai,Mayiladuthurai Mayiladuthurai Mayiladuthurai,01-06-1991,11.0975,79.6488,Working
+220,Sirkali,Mayiladuthurai Sirkazhi Sirkali,01-06-1991,11.2466,79.7384,Working
+221,Anaikaranchatram (Kollidam),Mayiladuthurai Sirkazhi Thirumailadi,01-06-1991,11.3292,79.7207,Working
+222,Tharangambadi,Mayiladuthurai Tharangambadi Erukkattencheri,01-06-1991,11.0252,79.8404,Working
+223,Sembanarkoil (PWD),Mayiladuthurai Tharangambadi Melaiyur,07-11-2022,11.1125,79.7395,Working
+224,Thirupoondi,Nagapattinam Kilvelur Thirupoondi west,01-06-1991,10.6231,79.8125,Working
+225,Velankanni,Nagapattinam Kilvelur Veilankanni,20-12-2021,10.6841,79.8394,Working
+226,Nagapattinam,Nagapattinam Nagapattinam Nagapattinam village,01-08-1989,10.7667,79.85,Working
+227,Thirukuvalai,Nagapattinam Thirukkuvalai Thirukuvalai,20-11-2021,10.631,79.7173,Working
+228,Kodiayakarai,Nagapattinam Vedaranyam Kodiayakarai,20-11-2021,10.2866,79.8229,Working
+229,Thalanayar,Nagapattinam Vedaranyam Thalanayar 1 st sethi,01-06-1991,10.5477,79.7654,Working
+230,Vedaranyam,Nagapattinam Vedaranyam Vedaranyam Part - 1,01-06-1991,10.3667,79.85,Working
+231,"PWD Office, Kumarapalayam",Namakkal Kumarapalayam Kumarapalayam Amani,01-01-1995,11.4401,77.6887,Working
+232,Mohanur,Namakkal Mohanur Mohanur,01-01-1980,11.0605,78.1379,Working
+233,Namakkal,Namakkal Namakkal Namakkal,01-01-1986,11.2132,78.1654,Working
+234,Puduchatram,Namakkal Namakkal Navani,01-01-2004,11.4026,78.1782,Working
+235,NKL Collecterate,Namakkal Namakkal Thummankurichi,09-02-2018,11.2493,78.1283,Working
+236,Paramathi velur,Namakkal Paramathi velur PARAMATHI,01-01-2000,11.0865,78.0044,Working
+237,Mangalapuram,Namakkal Rasipuram Mangalapuram,01-01-1995,11.5648,78.3762,Working
+238,Rasipuram,Namakkal Rasipuram Rasipuram,01-01-1987,11.4577,78.1944,Working
+239,Erumapatti,Namakkal Sendamangalam Erumapatti,01-01-1994,11.1528,78.2929,Working
+240,Sendamangalam,Namakkal Sendamangalam Sendamangalam,01-01-1996,11.2656,78.234,Working
+241,Tiruchengode,Namakkal Tiruchengode Tiruchengode,01-01-1999,11.3833,77.9,Working
+242,Chettikulam,Perambalur Alathur CHETTIKULAM,01-01-1999,11.1328,78.7735,Working
+243,Padalur,Perambalur Alathur PADALUR(W),01-01-1999,11.0917,78.8241,Working
+244,Agaram seegoor,Perambalur Kunnam AGARAMSEGOOR,12-10-2018,11.3925,79.0349,Working
+245,Labbaikudikadu,Perambalur Kunnam KELAPULIYUR(N),12-10-2018,11.3951,79.119,Working
+246,Puthu vettakudi,Perambalur Kunnam PUDUVETTAKUDI,12-10-2018,11.2618,79.0887,Working
+247,Perambalur,Perambalur Perambalur PERAMBALUR(N),01-01-1999,11.2333,78.8667,Working
+248,Eraiyur,Perambalur Veppanthattai ERAIYUR,12-10-2018,11.3574,78.9747,Working
+249,THALUTHALAI,Perambalur Veppanthattai THALUTHALAI,01-01-1999,11.3747,78.7463,Working
+250,V.KALATHUR,Perambalur Veppanthattai V.KALATHUR,12-10-2018,11.4042,78.9276,Working
+251,Krishnapuram,Perambalur Veppanthattai VENGALAM(E),12-10-2018,11.3767,78.7915,Working
+252,VEPPANTHATTAI,Perambalur Veppanthattai VEPPANTHATTAI (S),01-01-1999,11.3389,78.8234,Working
+253,Alangudi,Pudukkottai Alangudi ALANGADU,14-01-1974,10.3644,78.9808,Working
+254,Aranthangi,Pudukkottai Aranthangi ARANTHANGI,04-07-1973,10.1723,78.9982,Working
+255,Ayinkudi,Pudukkottai Aranthangi AYINKUDI,04-07-1973,10.2202,79.0963,Working
+256,Nagudi,Pudukkottai Aranthangi NAGUDI,04-07-1973,10.1515,79.1099,Working
+257,Avudaiyarkovil,Pudukkottai Avudaiyarkoil AVUDAIYARKOIL,04-07-1973,10.0811,79.0404,Working
+258,Meemisal,Pudukkottai Avudaiyarkoil MEMISAL SATHIRAMPPATTINAM,04-07-1973,9.92174,79.1415,Working
+259,Gandarvakottai,Pudukkottai Gandarvakottai KOVILUR,14-01-1974,10.5705,79.0058,Working
+260,Annavasal,Pudukkottai Illupur ANNAVASAL,04-07-1974,10.462,78.702,Working
+261,Illupur,Pudukkottai Illupur ILUPPUR,04-07-1974,10.5157,78.6169,Working
+262,Kudimiyanmalai,Pudukkottai Illupur KUDUMIYANMALAI,04-07-1973,10.418,78.658,Working
+263,Karambakudi,Pudukkottai Karambakudi KARAMBAKKUDI,14-01-1974,10.3948,79.0299,Working
+264,Malaiyur,Pudukkottai Karambakudi MALAIYUR,14-01-1974,10.4311,79.0235,Working
+265,Keeranur,Pudukkottai Kulathur KEERANUR,04-07-1973,10.5724,78.7893,Working
+266,UDAYALIPATTI,Pudukkottai Kulathur UDAIYALIPATTI,04-07-1973,10.584,78.8954,Working
+267,Manamelkudi,Pudukkottai Manamelkudi MANAMELKUDI,04-07-1973,10.0385,79.2323,Working
+268,Karaiyur,Pudukkottai Ponnamaravathi KARAIYUR,14-01-1974,10.37,78.6037,Working
+269,Ponnamaravathi,Pudukkottai Ponnamaravathi PONNAMARAVATHI WEST,14-01-1974,10.2715,78.5372,Working
+270,Perungalur,Pudukkottai Pudukkottai PERUNGALUR,14-01-1974,10.4875,78.9345,Working
+271,Adanakottai,Pudukkottai Pudukkottai PUDUKKOTTAI - NORTH,14-01-1974,10.5194,78.9564,Working
+272,Pudukkottai,Pudukkottai Pudukkottai PUDUKKOTTAI - NORTH,14-01-1974,10.3797,78.8208,Working
+273,Arimalam,Pudukkottai Thirumayam ARIMALAM,14-01-1974,10.2647,78.8841,Working
+274,Kilanilai,Pudukkottai Thirumayam KAIKULANVAYAL,14-01-1974,10.1746,78.9109,Working
+275,THIRUMAYAM,Pudukkottai Thirumayam THIRUMAYAM,14-01-1974,10.2438,78.746,Working
+276,VIRALIMALAI,Pudukkottai Viralimalai VIRALIMALAI,04-07-1973,10.6088,78.8966,Working
+277,Kadaladi,Ramanathapuram Kadaladi KADALADI,0000-00-00,9.2294,78.49,Working
+278,Vallinokam,Ramanathapuram Kadaladi VALINOKKAM,0000-00-00,9.1824,78.6289,Working
+279,Kamuthi,Ramanathapuram Kamuthi KAMUTHI,0000-00-00,9.41382,78.3763,Working
+280,Pallamorkulam,Ramanathapuram Keelakarai KANJIRANGUDI,0000-00-00,9.2656,78.8063,Working
+281,Mudukulathur,Ramanathapuram Mudukulathur KILA MUDUKULATHUR,0000-00-00,9.35,78.5166,Working
+282,Paramakudi,Ramanathapuram Paramakudi KATTUPARAMAKUDI,0000-00-00,9.542,78.5957,Working
+283,R.S.Mangalam,Ramanathapuram Rajasingamangalam RAJASINGAMANGALAM,0000-00-00,9.635,78.8494,Working
+284,Mandapam,Ramanathapuram Ramanathapuram MANDAPAM,0000-00-00,9.2741,79.119,Working
+285,Ramanathapuram,Ramanathapuram Ramanathapuram RAJASURIAMADAI,12-11-1976,9.36368,78.8308,Working
+286,pamban,Ramanathapuram Rameswaram PAMBAN,0000-00-00,9.28169,79.2089,Working
+287,Thangachimadam,Ramanathapuram Rameswaram PAMBAN,0000-00-00,9.2833,79.2375,Working
+288,Rameswaram,Ramanathapuram Rameswaram RAMESWARAM,0000-00-00,9.28653,79.2974,Working
+289,Thondi,Ramanathapuram Thiruvadani THONDI,15-06-1959,9.74619,78.9561,Working
+290,Tiruvadani,Ramanathapuram Thiruvadani TIRUVADANAI,0000-00-00,9.78186,78.9188,Working
+291,Theerthandathanam,Ramanathapuram Thiruvadani VATTANAM,0000-00-00,9.83448,79.0653,Working
+292,Vattanam,Ramanathapuram Thiruvadani VATTANAM,15-06-1959,9.82983,79.0661,Working
+293,Arakkonam,Ranipet Arakkonam Arakkonam,01-01-1980,13.0917,79.6597,Working
+294,Minnal,Ranipet Arakkonam Minnal,07-11-2022,13.0751,79.5558,Working
+295,Arcot,Ranipet Arcot Arcot,01-01-2001,12.9028,79.3372,Working
+296,Kalavai PWD,Ranipet Kalavai Kalavai,15-07-2020,12.773,79.4168,Working
+297,Kaveripakkam,Ranipet Nemili Kaveripakkam,01-07-1962,12.9051,79.4656,Working
+298,Panapakkam,Ranipet Nemili Panappakkam,07-11-2022,12.9258,79.5666,Working
+299,Sholingur,Ranipet Sholingur Sholinghur,01-01-1980,13.1118,79.4309,Working
+300,Ammoor (Walajah Railway Station),Ranipet Walajah Ammoor,13-07-2021,12.9707,79.36,Working
+301,Palar Anicut,Ranipet Walajah Wallajah,07-11-2022,12.8838,79.3773,Working
+302,Ranipet,Ranipet Walajah Wallajah,07-11-2022,12.9279,79.3275,Working
+303,Wallajah,Ranipet Walajah Wallajah,01-01-1980,12.9271,79.3669,Working
+304,Attur,Salem Attur ATTUR,21-10-1974,11.6,78.616,Working
+305,Edapadi,Salem Edappady IDAPPADI,10-05-1990,11.583,77.8347,Working
+306,Gangavalli,Salem Ganagavalli GANGAVALLI,06-09-2014,11.496,78.6476,Working
+307,Thammampatti,Salem Ganagavalli TAMMAMPATTI,28-12-2008,11.45,78.5,Working
+308,Danishpet,Salem Kadayampatti DANISHPET,18-10-1993,11.8585,78.137,Working
+309,Mettur,Salem Mettur NAVAPPATTI,12-06-1934,11.783,77.8,Working
+310,Omalur,Salem Omalur OMALUR,01-03-1989,11.75,78.05,Working
+311,TNAU CRI Yethapur,Salem Pethanaickenpalayam ETTAPUR,31-10-2001,11.652,78.468,Working
+312,Kariyakovil Dam,Salem Pethanaickenpalayam KARIYAKOVILVALAVU,01-05-1993,11.775,78.569,Working
+313,Salem,Salem Salem SALEM TOWN,1889-11-01,11.65,78.166,Working
+314,sankaridurg,Salem Sankari SANKAGIRI,20-08-1995,11.466,77.866,Working
+315,Thalaivasal,Salem Thalaivasal NATHAKKARAI,07-11-2022,11.5984,78.7732,Working
+316,Veeraganoor,Salem Thalaivasal VIRAGANUR,06-09-2014,11.4762,78.7386,Working
+317,Anaimaduvu Dam,Salem Valapady PULUDIKKUTTAI,01-01-1984,11.773,78.4267,Working
+318,Valappady,Salem Valapady SARKAR VALAPADI,01-01-2008,11.666,78.4,Working
+319,Yercaud,Salem Yercaud YERCADU,28-11-1999,11.4638,78.125,Working
+320,Devakottai,Sivagangai Devakottai IRAVUSERI,21-11-2019,9.96428,78.8024,Working
+321,Ilayangudi,Sivagangai Ilayankudi ILAYANKUDI NORTH,21-11-2019,9.62914,78.6174,Working
+322,PWD Travellers Bungalow,Sivagangai Kalaiyarkovil KAKULAM,07-11-2022,9.84679,78.6345,Working
+323,Karaikudi,Sivagangai Karaikudi SAKKOTTAI,21-11-2019,10.0756,78.7789,Working
+324,Manamadurai,Sivagangai Manamadurai SEIKALATHUR,21-11-2019,9.71422,78.4645,Working
+325,AEE(WRD) Office Singampunari,Sivagangai Singampunari SINGAMPUNARI NORTH,07-11-2022,10.1812,78.4309,Working
+326,Sivagangai,Sivagangai Sivagangai KOTTAGUDI,07-12-2019,9.8555,78.4872,Working
+327,Thiruppathur,Sivagangai Thirupattur THIRUPPATHUR,21-11-2019,10.1125,78.596,Working
+328,Thiruppuvanam,Sivagangai Thiruppuvanam THIRUPPUVANAM PUDUR,21-11-2019,9.77424,78.3022,Working
+329,Ayikudi,Tenkasi Kadayanallur AYIKUDI,07-01-1988,9.00053,77.2043,Working
+330,Karuppanadhi Dam section,Tenkasi Kadayanallur KRISHNAPURAM,08-11-2022,9.1463,77.3102,Working
+331,Sankarankovil,Tenkasi Sankarankovil SANKARANKOVIL,10-12-1964,9.16655,77.5365,Working
+332,Adavinainarkoil Dam,Tenkasi Shencottai Mekkarai,08-11-2022,9.0855,77.2306,Working
+333,Gundar dam,Tenkasi Shencottai Sengottai Keelur,08-11-2022,8.96988,77.2991,Working
+334,Shencottai,Tenkasi Shencottai Sengottai Town,22-11-1956,8.97552,77.2499,Working
+335,Sivagiri,Tenkasi Sivagiri VISWANATHAPERI - PART-1,01-01-1985,9.34648,77.4338,Working
+336,Ramanadhi Dam Section,Tenkasi Tenkasi Mela kadaiyam,08-11-2022,8.8463,77.3275,Working
+337,Gadana dam Section,Tenkasi Tenkasi Sivasailam,08-11-2022,8.7991,77.3105,Working
+338,Tenkasi,Tenkasi Tenkasi Tenkasi,01-01-1985,8.96477,77.3044,Working
+339,Budalur,Thanjavur Budalur BUDALUR,01-02-1983,10.7968,78.9769,Working
+340,Thirukkattupalli,Thanjavur Budalur THIRUKKATTUPALLI,10-02-1939,10.8483,78.9566,Working
+341,Grand Anaicut,Thanjavur Budalur THOGUR,15-06-1939,10.7622,79.1594,Working
+342,"Taluk Office, Kumbakonam",Thanjavur Kumbakonam KUMBAKONAM (PATTANAM),09-04-1979,10.9617,79.3881,Working
+343,Orathanad,Thanjavur Orathanad MUTHAMBALPURAM,25-04-1949,10.6286,79.2531,Working
+344,Neivasal Thenpathi,Thanjavur Orathanad NEIVASAL THENPATHI,19-01-1967,10.6756,79.2401,Working
+345,Ayyampettai,Thanjavur Papanasam AYYAMPETTAI,01-02-1983,10.8976,79.1981,Working
+346,Papanasam,Thanjavur Papanasam PAPANASAM,25-01-1983,10.9245,79.2729,Working
+347,Adirampatnam,Thanjavur Pattukottai ADIRAMPATTINAM,01-02-1984,10.3413,79.3796,Working
+348,Madukkur,Thanjavur Pattukottai MADUKKUR SOUTH,02-08-1947,10.4786,79.3976,Working
+349,Pattukkottai,Thanjavur Pattukottai NADIYAMMALPURAM,01-05-1985,10.4333,79.3167,Working
+350,Echanviduthi,Thanjavur Pattukottai SERUVAVIDUTHI NORTH,02-01-1984,10.3413,79.1929,Working
+351,Peravurani,Thanjavur Peravurani PERAVURANI - 1,02-01-1984,10.2837,79.2028,Working
+352,Kurungulam,Thanjavur Thanjavur KURUNKULAM WEST,10-02-1979,10.6527,79.101,Working
+353,Thanjavur,Thanjavur Thanjavur PUDUPATTINAM,05-03-1970,10.787,79.1378,Working
+354,Vallam,Thanjavur Thanjavur VALLAM NORTH,10-03-1970,10.714,79.0702,Working
+355,Thiruvaiyaru,Thanjavur Thiruvaiyaru MUGASA KALYANAPURAM,17-03-1970,10.8866,79.1167,Working
+356,Manjalaru,Thanjavur Thiruvidaimaruthur SATHANUR,26-01-1981,11.0096,79.5049,Working
+357,Thiruvidaimaruthur,Thanjavur Thiruvidaimaruthur THIRUVIDAIMARUTHUR,10-01-1979,10.9972,79.4524,Working
+358,Lower Anaicut,Thanjavur Thiruvidaimaruthur VINAYAKAN STREET,18-03-1994,11.143,79.4507,Working
+359,Vettikadu,Thanjavur Thiruvonam VETTIKADU,25-04-1949,10.5699,79.1929,Working
+360,Burliar,The Nilgiris Coonoor BURLIAR,29-11-2019,11.3428,76.8484,Working
+361,Coonoor,The Nilgiris Coonoor Conoor Town,29-11-2019,11.3442,76.7948,Working
+362,Adar estate,The Nilgiris Coonoor COONOOR RURAL,27-02-2020,11.3704,76.834,Working
+363,Billimalai Estate,The Nilgiris Coonoor HULICAL 1,27-02-2020,11.3663,76.8199,Working
+364,Ketti,The Nilgiris Coonoor KETTI 2,29-11-2019,11.3833,76.7666,Working
+365,Alakarai Estate,The Nilgiris Coonoor YEDAPALLY,27-02-2020,11.3686,76.8507,Working
+366,Devala,The Nilgiris Gudalur DEVALA 2,29-11-2019,11.4723,76.3815,Working
+367,Gudalur Bazaar,The Nilgiris Gudalur GUDALUR 1,29-11-2019,11.5046,76.4904,Working
+368,Upper Gudalur,The Nilgiris Gudalur GUDALUR 2,27-02-2020,11.503,76.4917,Working
+369,Barwood,The Nilgiris Gudalur OVALLEY 1,27-02-2020,11.4374,76.4874,Working
+370,Wood Braiyar Estate,The Nilgiris Gudalur PAdanthorai 1,27-02-2020,11.5391,76.4246,Working
+371,Harisan Malayalam Ltd. cherumulli,The Nilgiris Gudalur PADANTHORAI 2,27-02-2020,11.56,76.4337,Working
+372,Kil Kotagiri Estate,The Nilgiris Kotagiri DENAD-I,27-02-2020,11.4531,76.9351,Working
+373,Kodanad,The Nilgiris Kotagiri KODANAD,29-11-2019,11.5229,76.9083,Working
+374,Kotagiri,The Nilgiris Kotagiri KOTAGIRI -1,29-11-2019,11.4232,76.8636,Working
+375,Chamraj Estate,The Nilgiris Kundah balacola 2,27-02-2020,11.2981,76.6813,Working
+376,Avalanche,The Nilgiris Kundah ITHALAR 1,29-11-2019,11.3036,76.5799,Working
+377,Emerald,The Nilgiris Kundah ITHALAR 2,29-11-2019,11.3206,76.5799,Working
+378,Upperbhavani,The Nilgiris Kundah ITHALAR 2,29-11-2019,11.2257,76.5254,Working
+379,Kundah Bridge,The Nilgiris Kundah KIL KUNDAH 1,29-11-2019,11.2667,76.65,Working
+380,Geddai,The Nilgiris Kundah KIL-KUNDAH 2,29-11-2019,11.2504,76.6802,Working
+381,Kinnakorai,The Nilgiris Kundah KINNAKORAI,29-11-2019,11.2174,76.6636,Working
+382,Harisan Malayalam Ltd. Went worth Estate Cher,The Nilgiris Pandalur CHERANGODE-2,27-02-2020,11.5135,76.2825,Working
+383,Taluk Office Pandalur,The Nilgiris Pandalur NELLIYALAM 1,27-02-2020,11.4871,76.3412,Working
+384,Kallaty,The Nilgiris Udhagai HULLATHY,29-11-2019,11.4628,76.681,Working
+385,Shanthi vijaya School,The Nilgiris Udhagai MASINAGUDI,27-02-2020,11.56,76.64,Working
+386,Naduvattam,The Nilgiris Udhagai NADUVATTAM,29-11-2019,11.4806,76.5428,Working
+387,Glenmorgan,The Nilgiris Udhagai SHOLUR,29-11-2019,11.4727,76.6123,Working
+388,Udhagai,The Nilgiris Udhagai Udhagai Town(East),01-01-2010,11.4187,76.711,Working
+389,Aundipatti,Theni Aundipatti Andipatti Bit-I,08-10-2007,10.0003,77.608,Working
+390,Bodinayakanur,Theni Bodinayakanur Bodi(Town),01-01-1940,10.0205,77.3283,Working
+391,Vaigai Dam,Theni Periyakulam Melmangalam Bit -2,01-01-1958,10.0694,77.5294,Working
+392,Sothuparai,Theni Periyakulam Thengarai Bit-2,01-11-2001,10.1293,77.4659,Working
+393,Periyakulam,Theni Periyakulam Thenkarai Bit -1,04-10-1900,10.1249,77.5341,Working
+394,Manjalar,Theni Periyakulam Thevathanapatti Bit -1,01-04-1968,10.1911,77.6312,Working
+395,Aranmanipudhur,Theni Theni Koduvilarpatti,31-12-1977,9.99894,77.4839,Working
+396,Veerapandi,Theni Theni Veerapandi,20-10-1935,9.96408,77.4315,Working
+397,Gudalur,Theni Uthamapalayam Melagudalur -North,20-07-1941,9.66912,77.2358,Working
+398,Periyar,Theni Uthamapalayam Melagudalur-South,01-01-1941,9.6166,77.1833,Working
+399,Thekkadi,Theni Uthamapalayam Melagudalur-South,01-01-1941,9.59604,77.1728,Working
+400,Shanmuganadhi,Theni Uthamapalayam Rayappanpatti,07-11-2022,9.73539,77.3534,Working
+401,Uthamapalayam,Theni Uthamapalayam Uthamapalayam (South),01-01-1979,9.80532,77.3349,Working
+402,Kallakudi,Thiruchirappalli Lalgudi KALLAKUDI,01-07-1992,10.9796,78.9513,Working
+403,Nandhiyar Head,Thiruchirappalli Lalgudi NATHAMANGUDI,01-07-1980,10.8998,78.9438,Working
+404,Pullambadi,Thiruchirappalli Lalgudi PULLAMBADI(NORTH),01-07-1980,10.9282,78.7815,Working
+405,Lalgudi,Thiruchirappalli Lalgudi SIRUDAIYUR,01-07-1980,10.8805,78.8168,Working
+406,Ponnaniyar Dam,Thiruchirappalli Manapparai SEKKANAM,01-07-1974,10.6072,78.4214,Working
+407,Manapparai,Thiruchirappalli Manapparai SEVALUR,01-07-1998,10.608,78.4223,Working
+408,Vathalai Anaicut,Thiruchirappalli Mannachanallur KARIYAMANIKAM (WEST),01-07-1978,10.8934,78.5822,Working
+409,Samayapuram,Thiruchirappalli Mannachanallur S.KANNANUR(WEST),01-07-1981,10.9212,78.7385,Working
+410,Sirukudi,Thiruchirappalli Mannachanallur SIRUKUDI,01-07-2005,11.0382,78.6728,Working
+411,Devimangalam,Thiruchirappalli Mannachanallur THATHAMANGALAM,01-07-2005,10.9822,78.719,Working
+412,Marungapuri,Thiruchirappalli Marungapuri MARUNGAPURI,01-07-2006,10.4478,78.434,Working
+413,Kovilpatty,Thiruchirappalli Marungapuri THOTTIAPATTY,01-07-2005,10.523,78.4791,Working
+414,Musiri,Thiruchirappalli Musiri MUSIRI (KEL),01-07-1983,10.9461,78.4457,Working
+415,Pulivalam,Thiruchirappalli Musiri PULIVALAM,01-07-2004,11.0131,78.6373,Working
+416,Thathaiyagarpet,Thiruchirappalli Musiri THATHIENGARPATTAI,01-07-1983,10.9545,78.4444,Working
+417,Navalur kottapattu,Thiruchirappalli Srirangam NAVALURKOTTAPATTU,01-07-1980,10.7548,78.6017,Working
+418,Tiruchirappalli Junction,Thiruchirappalli Thiruchirapalli-west K ABHISHEKAPURAM,01-07-1981,10.7942,78.6854,Working
+419,Tiruchirappalli Town,Thiruchirappalli Thiruchirapalli-west K ABHISHEKAPURAM,01-07-1986,10.8074,78.6829,Working
+420,Thuvakudi,Thiruchirappalli Thiruverumbur THUVAKUDI,27-09-2010,10.7514,78.8297,Working
+421,Koppampatti,Thiruchirappalli Thuraiyur KOPPAMPATTI,01-07-2005,11.1699,78.624,Working
+422,Thenparanadu,Thiruchirappalli Thuraiyur THENPARANADU,11-09-2008,11.3066,78.5878,Working
+423,Thuraiyur,Thiruchirappalli Thuraiyur THURAIYUR,01-07-1971,11.1448,78.5941,Working
+424,Ponmalai (Golden rock),Thiruchirappalli Tiruchirappalli-east ALATHUR,01-07-1971,10.7865,78.7272,Working
+425,Tiruchirappalli Airport,Thiruchirappalli Tiruchirappalli-east KOTTAPATTU,01-07-1971,10.7616,78.7092,Working
+426,Kudavasal,Thiruvarur Kudavasal Kudavasal,01-01-1934,10.8589,79.4788,Working
+427,Mannargudi,Thiruvarur Mannargudi Mannargudi,22-05-1971,10.6693,79.4464,Working
+428,"Sub Registrar Office, Muthupettai",Thiruvarur Muthupettai Muthupettai,10-09-1924,10.4108,79.495,Working
+429,"Taluk Office, Nannilam",Thiruvarur Nannilam Nallamaangudi,01-01-1960,10.5253,79.3634,Working
+430,Pandavaiyaru,Thiruvarur Needamangalam KALATHUR,01-01-1997,10.7539,79.4987,Working
+431,Needamangalam,Thiruvarur Needamangalam Palaiya Nedamangalam,11-02-1982,10.7737,79.4169,Working
+432,"Taluk Office, Thiruthuraipoondi",Thiruvarur Thiruthuraipoondi Thiruthuraipoondi,10-09-1924,10.5752,79.6033,Working
+433,"Taluk Office , Tiruvarur",Thiruvarur Thiruvarur Vijayapuram,01-01-1997,10.7666,79.6284,Working
+434,Valangaiman,Thiruvarur Valangaiman Valangaiman,01-01-1914,10.8894,79.3929,Working
+435,Ettayapuram,Thoothukudi Ettayapuram ETTAIYAPURAM,15-12-1967,9.15062,77.9823,Working
+436,Kadambur,Thoothukudi Kayathar KADAMBUR,15-12-1967,8.9966,77.8603,Working
+437,Kayathar,Thoothukudi Kayathar KAYATHAR,21-07-1966,8.947,77.7738,Working
+438,Kalugumalai,Thoothukudi Kovilpatty KALUGUMALAI,15-12-1967,9.14726,77.7042,Working
+439,Kovilpatti,Thoothukudi Kovilpatty KOVILPATTI,15-12-1967,9.1744,77.8747,Working
+440,Keelarasadi,Thoothukudi Ottapidaram KEELAARASADI,10-07-1984,8.85863,78.1459,Working
+441,Maniyachi,Thoothukudi Ottapidaram MANIYACHI,15-12-1967,8.90491,78.0228,Working
+442,Ottapadiram,Thoothukudi Ottapidaram OTTAPIDARAM,15-06-1989,8.9158,78.021,Working
+443,VEDANATHAM,Thoothukudi Ottapidaram VEDANATHAM,15-12-1984,8.97205,78.1469,Working
+444,Sathankulam,Thoothukudi Sattankulam SATTANKULAM,12-11-1981,8.44249,77.9096,Working
+445,"Old Taluk Office, Srivaikuntam",Thoothukudi Srivaikundam SRIVAIKUNTAM,22-01-1974,8.3745,77.5444,Working
+446,TUTICORIN,Thoothukudi Thoothukudi Mullakkadu part-1,22-01-1974,8.75094,78.1888,Working
+447,Kayalpattinam,Thoothukudi Tiruchendur KAYALPATTANAM SOUTH,24-08-1964,8.5684,78.1199,Working
+448,TIRUCHENDUR,Thoothukudi Tiruchendur KEELA TIRUCHENDUR,19-03-1914,8.499,78.1255,Working
+449,Kulasekarapattinam,Thoothukudi Tiruchendur KULASEKARAPATTANAM,05-07-1901,8.4,78.0523,Working
+450,Kadalkudi,Thoothukudi Vilathikulam KADALKUDI,10-01-1994,9.2084,78.2428,Working
+451,Surankudi,Thoothukudi Vilathikulam SOORANGUDI,24-08-1989,9.1051,78.3198,Working
+452,VAIPPAR,Thoothukudi Vilathikulam VAIPPAR-I,24-08-1989,9.135,78.1453,Working
+453,VILATHIKULAM,Thoothukudi Vilathikulam VILATHIKULAM,11-04-1960,9.1302,78.1681,Working
+454,Kannadian Anicut,Tirunelveli Ambasamudram Kallidaikurichi Vadakku,07-11-2022,8.68538,77.4397,Working
+455,Ambasamudram,Tirunelveli Ambasamudram Mela ambasamudram,02-08-1962,8.70336,77.457,Working
+456,Kakkachi,Tirunelveli Ambasamudram Singampatti Jamin - 2,07-11-2022,8.55858,77.3891,Working
+457,Manimutharu,Tirunelveli Ambasamudram Singampatti Jamin - 2,03-01-1958,8.65583,77.4136,Working
+458,Manjolai,Tirunelveli Ambasamudram Singampatti Jamin - 2,07-11-2022,8.56951,77.4076,Working
+459,Nalumukku,Tirunelveli Ambasamudram Singampatti Jamin - 2,07-11-2022,8.55312,77.3616,Working
+460,Oothu,Tirunelveli Ambasamudram Singampatti Jamin - 2,07-11-2022,8.57525,77.3394,Working
+461,Papanasam,Tirunelveli Ambasamudram vickiramasingapuram - 2,09-01-1944,8.65125,77.3113,Working
+462,Servalar Dam,Tirunelveli Ambasamudram vickiramasingapuram - 2,07-11-2022,8.68783,77.3038,Working
+463,Cheranmahadevi,Tirunelveli Cheranmahadevi Cherankovilpathu,07-01-1989,8.68972,77.5625,Working
+464,Nanguneri,Tirunelveli Nanguneri MARUKALKURICHI,07-06-1933,8.49547,77.6464,Working
+465,Moolaikaraipatti,Tirunelveli Nanguneri MUNANGIPATTI,07-11-2022,8.53852,77.7654,Working
+466,Kalakadu,Tirunelveli Nanguneri PADALAIYAR KULAM,07-11-2022,8.51376,77.558,Working
+467,Kodumudiyaru Dam,Tirunelveli Nanguneri THIRUGURANKUDI PART-1,07-11-2022,8.42644,77.5273,Working
+468,Palayamkottai,Tirunelveli Palayamkottai KEELAVEERARAGAVAPURAM,20-01-1995,8.726,77.7155,Working
+469,Radhapuram,Tirunelveli Radhapuram RADHAPURAM,19-08-1988,8.27228,77.687,Working
+470,Nambiyar Dam,Tirunelveli Thisayanvilai KOTTAIKARUNGULAM PART-1,07-11-2022,8.37092,77.7386,Working
+471,Tirunelveli,Tirunelveli Tirunelveli TIRUNELVELI,19-09-1988,8.72776,77.6951,Working
+472,Ambur,Tirupathur Ambur Ambur,22-01-2019,12.7841,78.7217,Working
+473,"ACS Mill, Vadapudupattu",Tirupathur Ambur Vadapuduputtu,01-07-1982,12.8236,78.7689,Working
+474,TCS Mill Kethandapatti,Tirupathur Natrampalli Kethandapatti,15-11-1977,12.6129,78.5585,Working
+475,"PWD IB, Natrampalli",Tirupathur Natrampalli Natrampalli,01-07-2006,12.5913,78.5123,Working
+476,"Taluk Office, Tirupathur",Tirupathur Tirupattur Tiruppattur Town,01-01-1980,12.493,78.566,Working
+477,Alangayam,Tirupathur Vaniyambadi Alangayam,01-01-1980,12.6243,78.7531,Working
+478,Vaniyambadi,Tirupathur Vaniyambadi Vaniyambadi Urban,01-01-1980,12.6872,78.6186,Working
+479,Avinashi,Tiruppur Avinashi AVINASHI,01-01-2009,11.2,77.2833,Working
+480,Dharapuram,Tiruppur Dharapuram CHITARAVITHANPALAYAM,01-01-1950,10.7333,77.5333,Working
+481,Uppar dam,Tiruppur Dharapuram KETHALREV,07-11-2022,10.7775,77.4228,Working
+482,Kundadam,Tiruppur Dharapuram KUNDADAM,01-02-2019,10.8341,77.5293,Working
+483,moolanur,Tiruppur Dharapuram MOOLANUR,01-01-1983,10.7833,77.7,Working
+484,Nallathangal Odai Reservoir,Tiruppur Dharapuram PONNIVADI,07-11-2022,10.6932,77.5947,Working
+485,Kangeyam,Tiruppur Kangeyam KANGEYAM,01-01-1980,11,77.5667,Working
+486,Vattamalai Karai Odai Reservoir,Tiruppur Kangeyam UTHAMA PALAYAM,07-11-2022,10.901,77.6726,Working
+487,Vellakoil,Tiruppur Kangeyam VELLAKOIL,01-02-2019,10.9543,77.6874,Working
+488,Madathukulam,Tiruppur Madathukkulam SARKAR KANNADI PUTHUR,01-02-2019,10.5559,77.366,Working
+489,Palladam,Tiruppur Palladam NARANAPURAM,01-01-1996,10.9942,77.2844,Working
+490,"PWD IB,(Collector Camp Office)",Tiruppur Tiruppur north THOTTIPALAYAM,03-09-2021,11.1227,77.304,Working
+491,Tiruppur North Taluk Office,Tiruppur Tiruppur north THOTTIPALAYAM,15-12-1989,11.1085,77.341,Working
+492,District Collector Office,Tiruppur Tiruppur south VEERAPANDI,01-02-2019,11.0825,77.342,Working
+493,Tiruppur South Taluk Office,Tiruppur Tiruppur south VEERAPANDI,01-02-2019,11.0842,77.3809,Working
+494,Amaravathy Dam,Tiruppur Udumalpet ANDIKONDANUR 1,01-01-1958,10.4183,77.2635,Working
+495,Udumalpet,Tiruppur Udumalpet KANAKAMPALAYAM,01-01-1981,10.5841,77.2452,Working
+496,Thirumoorthi Dam,"Tiruppur Udumalpet THALI 1 - 2, THIRUMURTHY NAGAR",01-01-1964,10.4752,77.1543,Working
+497,Thirumoorthy IB,"Tiruppur Udumalpet THALI 1 - 2, THIRUMURTHY NAGAR",01-02-2019,10.473,77.1483,Working
+498,Uthukuli,Tiruppur Uthukkuli PUNJAI UOOTTHUKKULI,01-02-2019,11.1644,77.4349,Working
+499,Avadi,Tiruvallur Avadi Thandurai,13-11-2021,13.123,80.075,Working
+500,Gummidipoondi,Tiruvallur Gummidipoondi Pethikuppam,01-01-1967,13.4262,80.1151,Working
+501,Pallipattu,Tiruvallur Pallipattu Veliagaram,01-01-2003,13.33,79.43,Working
+502,Cholavaram,Tiruvallur Ponneri Nallur,01-01-1960,13.2181,80.1536,Working
+503,Redhills,Tiruvallur Ponneri Naravarikuppam,01-01-1960,13.1884,80.1867,Working
+504,Ponneri,Tiruvallur Ponneri Ponneri 2,01-01-1967,13.33,80.195,Working
+505,Jamine Koratur,Tiruvallur Poonamallee Korattur(A),01-01-1990,13.0903,80.0107,Working
+506,Poonamallee,Tiruvallur Poonamallee Poonamallee,01-01-2009,13.0472,80.0945,Working
+507,R.K.Pet,Tiruvallur R.k. pettai Vilakanampoodi,01-01-2011,13.1644,79.438,Working
+508,Tiruttani,Tiruvallur Tiruttani Pattabiramapuram,01-01-2011,13.187,79.613,Working
+509,Thiruvalangadu,Tiruvallur Tiruttani Thiruvalangadu,01-01-1982,13.1317,79.7804,Working
+510,Poondi,Tiruvallur Tiruvallur Poondi,01-01-1967,13.2085,79.876,Working
+511,Thamaraipakkam,Tiruvallur Tiruvallur Thamaraipakkam,01-01-1960,13.2291,80.0258,Working
+512,Tiruvallur,Tiruvallur Tiruvallur Tiruvallur,01-01-1967,13.25,80,Working
+513,Uthukottai,Tiruvallur Uthukottai Uthukottai,01-01-1999,13.33,79.89,Working
+514,"Taluk Office, Arani",Tiruvannamalai Arni ARNI WEST,1889-01-01,12.7053,79.2489,Working
+515,"Taluk Office, Chengam",Tiruvannamalai Chengam CHENGAM,01-06-2008,12.3408,78.4567,Working
+516,Chetpet,Tiruvannamalai Chetpet CHETPET,01-06-2017,12.4655,79.3498,Working
+517,Cheyyar,Tiruvannamalai Cheyyar KODANAGAR,01-06-1989,12.667,79.5402,Working
+518,Jamunamarathur,Tiruvannamalai Jamunamarathoor KOVILUR,12-10-2019,12.6032,78.8904,Working
+519,Kalasapakkam,Tiruvannamalai Kalasapakkam KALASAPPAKKAM,01-08-2016,12.4325,79.1035,Working
+520,Kilpennathur,Tiruvannamalai Kilpennathur KIZHPENNATHUR,01-06-2018,12.2506,79.2182,Working
+521,Polur,Tiruvannamalai Polur POLUR,01-06-1990,12.5084,79.1226,Working
+522,Thandrampattu,Tiruvannamalai Thandrampet THANDARAMPATTU,17-05-2017,12.15,78.94,Working
+523,Tiruvannamalai,Tiruvannamalai Tiruvannamalai THIRUVANNAMALAI,01-06-2014,12.2344,79.0762,Working
+524,Vandavasi,Tiruvannamalai Vandavasi VANDAVASI,01-01-1990,12.5,79.6,Working
+525,Vembakkam,Tiruvannamalai Vembakkam VEMBAKKAM,28-12-2017,12.7862,79.5982,Working
+526,Gudiyatham,Vellore Gudiyatham Gudiyattam Town,01-01-1980,12.9457,78.8739,Working
+527,Melalathur,Vellore Gudiyatham Melalathur,01-01-2005,12.9123,78.8769,Working
+528,VCS Mill Ammundi,Vellore Katpadi Ammundi,01-07-1990,12.977,79.2407,Working
+529,Katpadi,Vellore Katpadi Katpadi,01-01-1980,12.9724,79.1388,Working
+530,Ponnai Dam,Vellore Katpadi Ponnai,01-01-1960,13.125,79.255,Working
+531,Vellore,Vellore Vellore Sathuvachari,01-01-1900,12.9362,79.1502,Working
+532,RSCL-3 Anandhapuram,Villupuram Gingee ANANDHAPURAM,18-10-2018,12.1187,79.3697,Working
+533,Gingee,Villupuram Gingee GINGEE,01-01-2011,12.25,79.4333,Working
+534,RSCL-3 Semmedu,Villupuram Gingee SEMMEDU,18-10-2018,12.2521,79.2857,Working
+535,RSCL-3 Vallam,Villupuram Gingee VALLAM,18-10-2018,12.2454,79.515,Working
+536,BASL Manampoondi,Villupuram Kandachipuram MANAMPOONDI,18-10-2018,11.9834,79.21,Working
+537,BASL Mugaiyur,Villupuram Kandachipuram MUGAIYUR,18-10-2018,11.9767,79.3036,Working
+538,Marakkanam,Villupuram Marakkanam MARAKANAM SOUTH,01-01-2011,12.1833,79.9,Working
+539,RSCL-3 Avalurpettai,Villupuram Melmalaiyanur AVALURPETTAI,18-10-2018,12.3387,79.2439,Working
+540,RSCL-3 Valathy,Villupuram Melmalaiyanur VALATHI,18-10-2018,12.3461,79.3737,Working
+541,SCS MILL Arasoor,Villupuram Thiruvennainallur ARASUR,18-10-2018,11.8292,79.4271,Working
+542,SCS MILL Thiruvennainallur,Villupuram Thiruvennainallur THIRUVENNAINALLUR (N),18-10-2018,11.8589,79.3658,Working
+543,TINDIVANAM,Villupuram Tindivanam TINDIVANAM,01-01-2011,12.25,79.65,Working
+544,VANUR,Villupuram Vanur VANUR,01-11-2011,12.0333,79.75,Working
+545,RSCL-2 Kanjanur,Villupuram Vikkiravandi KANCHANUR,18-10-2018,12.0595,79.4498,Working
+546,RSCL-2 Mundiyampakkam,Villupuram Vikkiravandi MUNDIYAMPAKKAM,18-10-2018,11.9989,79.5179,Working
+547,RSCL-2 Nemoor,Villupuram Vikkiravandi NEMUR,18-10-2018,12.0971,79.4546,Working
+548,RSCL-2 Soorapattu,Villupuram Vikkiravandi SOORAPPATTU,18-10-2018,12.0065,79.4328,Working
+549,RSCL-2 Kedar,Villupuram Villupuram KEDAR,18-10-2018,12.0067,79.4059,Working
+550,RSCL-2 Koliyanur,Villupuram Villupuram KOLIYANUR,18-10-2018,11.9271,79.5502,Working
+551,RSCL-2 Valavanur,Villupuram Villupuram VALAVANUR,18-10-2018,11.9211,79.579,Working
+552,VILUPPURAM,Villupuram Villupuram VILUPURAM,01-01-2011,11.9333,79.5,Working
+553,Aruppukottai,Virudhunagar Aruppukottai ARUPPUKOTTAI,12-09-1955,9.50253,78.0963,Working
+554,Kovilankulam,Virudhunagar Aruppukottai KOVILANKULAM,09-11-1981,9.51052,78.0958,Working
+555,Kariyapatti,Virudhunagar Kariyapatti KATTUKUTHAGAI KARISALKULAM,10-07-1982,9.66951,78.101,Working
+556,Rajapalayam,Virudhunagar Rajapalayam Sammandhapuram,18-03-1980,9.45935,77.5453,Working
+557,Sattur,Virudhunagar Sattur Sattur,1893-11-07,9.352,77.9201,Working
+558,Sivakasi RDO office,Virudhunagar Sivakasi Anaiyur,15-07-1982,9.46282,77.7779,Working
+559,"Taluk Office, Srivilliputhur",Virudhunagar Srivlliputhur Srivilliputtur,10-11-1976,9.50373,77.6359,Working
+560,Tiruchuli,Virudhunagar Tiruchuli TIRUCHULI,07-07-1980,9.53761,78.2023,Working
+561,Vembakottai Dam,Virudhunagar Vembakkottai Kundayiruppu,01-01-1999,9.33307,77.7695,Working
+562,Virudhunagar,Virudhunagar Virudhunagar CHINNAMUPANPATTI,10-03-1980,9.60025,77.9529,Working
+563,Periyar Dam,Virudhunagar Watrap S.Kodikulam,10-07-1973,9.6383,77.5232,Working
+564,Watrap,Virudhunagar Watrap Watrap,10-05-1973,9.6365,77.6399,Working

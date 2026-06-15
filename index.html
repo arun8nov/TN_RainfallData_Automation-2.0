@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TN Rainfall Telemetry & Climate Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- ApexCharts.js -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- PapaParse (CSV Parser) -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-obsidian: #020106;
+            --glass-bg: rgba(10, 8, 22, 0.5);
+            --glass-hover: rgba(20, 18, 38, 0.7);
+            --border-glow: rgba(99, 102, 241, 0.15);
+            --border-glow-hover: rgba(6, 182, 212, 0.45);
+            --color-text: #e2e8f0;
+            --color-muted: #64748b;
+            --neon-blue: #06b6d4;
+            --neon-purple: #8b5cf6;
+            --neon-green: #10b981;
+            --neon-orange: #f97316;
+            --neon-red: #ef4444;
+            
+            --sidebar-width: 72px;
+            --header-height: 64px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Custom Premium Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(8, 6, 16, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.25);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(6, 182, 212, 0.5);
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 50%, #0c0820 0%, var(--bg-obsidian) 100%);
+            color: var(--color-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+        }
+
+        /* Ambient background rain particle overlay */
+        .rain-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -999;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.05;
+        }
+        .rain-drop-bg {
+            position: absolute;
+            background: linear-gradient(transparent, rgba(56, 189, 248, 0.45));
+            width: 1px;
+            height: 60px;
+            animation: rainFallBg linear infinite;
+        }
+        @keyframes rainFallBg {
+            0% { transform: translateY(-100px); }
+            100% { transform: translateY(110vh); }
+        }
+
+        /* Slim SaaS Sidebar (72px Icon-Only) */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(8, 6, 16, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-right: 1px solid var(--border-glow);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            cursor: pointer;
+            filter: drop-shadow(0 0 8px var(--neon-blue));
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* SaaS Discord-Style Tooltips */
+        .nav-item {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-muted);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: white;
+            border-radius: 12px;
+        }
+        .nav-item.active {
+            background: rgba(6, 182, 212, 0.12);
+            color: var(--neon-blue);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+        }
+
+        .nav-item::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 64px;
+            background: rgba(8, 6, 16, 0.95);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+        }
+        .nav-item:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Main Cockpit Layout */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header Navigation HUD */
+        .hud-header {
+            height: var(--header-height);
+            border-bottom: 1px solid var(--border-glow);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(8, 6, 16, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .hud-title-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hud-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hud-meta {
+            font-size: 0.75rem;
+            color: var(--color-muted);
+            font-weight: 500;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding-left: 15px;
+        }
+
+        .hud-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sync-icon-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--color-text);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .sync-icon-btn:hover {
+            border-color: var(--border-glow-hover);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--neon-blue);
+        }
+
+        /* Contextual Select Filters on Sidebar HUD */
+        .sidebar-select {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+        }
+
+        .hud-select {
+            background: #080610;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            outline: none;
+            width: 48px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* Viewport Panels */
+        .viewport {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Compact Metric Capsule Ribbon */
+        .capsule-ribbon {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .capsule {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .capsule::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 3px;
+            background: var(--neon-blue);
+            border-radius: 3px 0 0 3px;
+        }
+        .capsule:hover {
+            border-color: var(--border-glow-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+        }
+
+        .capsule-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .capsule-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-muted);
+        }
+        .capsule-val {
+            font-size: 1.15rem;
+            font-weight: 850;
+            color: white;
+            margin-top: 2px;
+        }
+
+        /* Responsive Dashboard HUD structure */
+        .cockpit-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media(min-width: 1024px) {
+            .cockpit-grid {
+                grid-template-columns: 1.35fr 1fr;
+            }
+        }
+
+        /* Glass HUD Panel styling */
+        .hud-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-text);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 10px;
+        }
+
+        /* Internal scrolling lists */
+        .scroll-list {
+            overflow-y: auto;
+            max-height: 380px;
+            padding-right: 6px;
+        }
+
+        .obs-item {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        .obs-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(6, 182, 212, 0.25);
+            transform: translateX(3px);
+        }
+
+        .obs-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Canvas Radar layout */
+        .radar-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            max-height: 380px;
+            margin: 0 auto;
+            border-radius: 16px;
+            background: #010103;
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            overflow: hidden;
+        }
+        .radar-wrapper canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .radar-tooltip {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            background: rgba(4, 3, 9, 0.93);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.45);
+            border-radius: 12px;
+            padding: 10px 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 100;
+        }
+
+        .badge {
+            display: inline-flex;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 750;
+            text-transform: uppercase;
+        }
+
+        /* 7-Day weather cards layout */
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+        }
+
+        .weather-card {
+            background: rgba(10, 8, 22, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            border-radius: 14px;
+            padding: 12px 8px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .weather-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3), 0 0 35px rgba(99, 102, 241, 0.2);
+        }
+
+        .weather-date {
+            font-size: 0.68rem;
+            color: var(--color-muted);
+            font-weight: 600;
+        }
+        .weather-emoji {
+            font-size: 1.8rem;
+            margin: 6px 0;
+        }
+        .weather-desc {
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: #f8fafc;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.2;
+        }
+        .weather-temp {
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .weather-rain {
+            font-size: 0.65rem;
+            color: #38bdf8;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Lazy loading overlay */
+        .db-loader-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 1, 6, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border-radius: 20px;
+        }
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(6, 182, 212, 0.1);
+            border-top: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Compact Playback Slider */
+        .playback-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 10px 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .play-btn {
+            background: var(--neon-blue);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 4px 10px rgba(6, 182, 212, 0.3);
+            transition: all 0.3s;
+        }
+
+        /* Detailed Log table styling */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+        }
+        th {
+            background: rgba(8, 6, 16, 0.8);
+            color: var(--color-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 10px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        td {
+            padding: 10px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        /* Section dividers */
+        .section-header-compact {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            padding-left: 10px;
+            border-left: 3px solid var(--neon-blue);
+            margin-bottom: 15px;
+        }
+
+        /* CSS skeletons overlay */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.02) 75%);
+            background-size: 200% 100%;
+            animation: loadingSkeleton 1.5s infinite;
+        }
+
+        .flex-grow { flex-grow: 1; }
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+        .gap-3 { gap: 12px; }
+        .hidden { display: none !important; }
+
+        /* Mobile Responsive Styles & Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            background: rgba(8, 6, 16, 0.85);
+            border: 1px solid var(--border-glow);
+            color: var(--color-text);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 1100;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .menu-toggle:hover {
+            border-color: var(--border-glow-hover);
+            color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.25);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+            .sidebar {
+                left: -72px;
+                transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .hud-header {
+                padding-left: 64px; /* Space for mobile menu-toggle */
+            }
+            .cockpit-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .capsule-ribbon {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .capsule-ribbon {
+                grid-template-columns: 1fr !important;
+            }
+            .grid-cols-4 {
+                grid-template-columns: 1fr !important;
+            }
+            .hud-header {
+                flex-direction: column;
+                height: auto;
+                padding: 12px;
+                padding-left: 64px;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .hud-title-group {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .hud-meta {
+                border-left: none;
+                padding-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient background rain -->
+    <div id="rainBackground" class="rain-bg"></div>
+
+    <!-- Collapsible mobile menu toggle -->
+    <button class="menu-toggle" onclick="toggleSidebar()">
+        <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+    </button>
+
+    <!-- Slim Icon Sidebar HUD Navigation -->
+    <aside id="sidebar" class="sidebar">
+        <div class="brand" onclick="switchTab('tabLive', document.querySelector('.nav-item'))">
+            <span>☔</span>
+        </div>
+
+        <nav class="nav-list">
+            <div class="nav-item active" data-tooltip="Today's Telemetry" onclick="switchTab('tabLive', this)">
+                <i data-lucide="activity" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="nav-item" data-tooltip="Stations Coordinates" onclick="switchTab('tabMap', this)">
+                <i data-lucide="map-pin" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="nav-item" data-tooltip="Live Weather Radar" onclick="switchTab('tabRadar', this)">
+                <i data-lucide="radar" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="nav-item" data-tooltip="7-Day Forecast" onclick="switchTab('tabForecast', this)">
+                <i data-lucide="cloud-lightning" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="nav-item" data-tooltip="Historical Playback" onclick="switchTab('tabPlayback', this)">
+                <i data-lucide="history" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="nav-item" data-tooltip="Comparative Analytics" onclick="switchTab('tabCompare', this)">
+                <i data-lucide="git-compare" style="width: 20px; height: 20px;"></i>
+            </div>
+        </nav>
+
+        <!-- Sidebar Contextual Filters -->
+        <div id="sidebarFilters" class="sidebar-select" style="display: none;">
+            <div class="flex flex-col items-center">
+                <span class="control-label" style="font-size: 0.55rem; margin-bottom: 4px;">Node</span>
+                <select id="sidebarDistSelect" onchange="onDistrictChange(this.value)" class="hud-select"></select>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Navigation Content Wrapper -->
+    <div class="main-wrapper">
+        
+        <!-- Top HUD Header Bar -->
+        <header class="hud-header">
+            <div class="hud-title-group">
+                <span class="status-dot"></span>
+                <span class="hud-title">MET-CLIMATE RADAR</span>
+                <span id="hudDate" class="hud-meta">Observation sweep active</span>
+            </div>
+            
+            <div class="hud-controls">
+                <button onclick="reloadData()" class="sync-icon-btn" title="Sync Today's Data">
+                    <i data-lucide="rotate-cw" style="width: 16px; height: 16px;"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Main Viewport panels -->
+        <div class="viewport">
+            
+            <!-- Today's Telemetry View -->
+            <div id="tabLive" class="tab-panel flex flex-col gap-4">
+                
+                <!-- KPI Capsule Ribbon -->
+                <div id="loadingGrid" class="capsule-ribbon">
+                    <div class="skeleton h-14 rounded-xl"></div>
+                    <div class="skeleton h-14 rounded-xl"></div>
+                    <div class="skeleton h-14 rounded-xl"></div>
+                    <div class="skeleton h-14 rounded-xl"></div>
+                </div>
+
+                <div id="kpiGrid" class="capsule-ribbon" style="display: none;">
+                    <div class="capsule">
+                        <div class="capsule-left">
+                            <span class="capsule-label">Total Swept Precipitation</span>
+                            <span id="statTotal" class="capsule-val text-sky-400">0.0 mm</span>
+                        </div>
+                        <span style="font-size: 1.2rem;">🌧️</span>
+                    </div>
+                    <div class="capsule">
+                        <div class="capsule-left">
+                            <span class="capsule-label">Average Intensity</span>
+                            <span id="statAvg" class="capsule-val text-indigo-400">0.0 mm</span>
+                        </div>
+                        <span style="font-size: 1.2rem;">🌡️</span>
+                    </div>
+                    <div class="capsule">
+                        <div class="capsule-left">
+                            <span class="capsule-label">Peak District Accumulation</span>
+                            <span id="statTopDist" class="capsule-val text-purple-400 truncate w-32">None</span>
+                            <p id="statTopDistVal" style="font-size:0.65rem; font-weight:700; color:#94a3b8; margin-top:2px;">0.0 mm</p>
+                        </div>
+                        <span style="font-size: 1.2rem;">📍</span>
+                    </div>
+                    <div class="capsule">
+                        <div class="capsule-left">
+                            <span class="capsule-label">Wettest Gauge Station</span>
+                            <span id="statTopStation" class="capsule-val text-emerald-400 truncate w-32">None</span>
+                            <p id="statTopStationVal" style="font-size:0.65rem; font-weight:700; color:#94a3b8; margin-top:2px;">0.0 mm</p>
+                        </div>
+                        <span style="font-size: 1.2rem;">⚡</span>
+                    </div>
+                </div>
+
+                <!-- Main Radar Visual Deck (Concentric + Ranked progress) -->
+                <div class="cockpit-grid">
+                    
+                    <!-- Concentric radar panel -->
+                    <div class="hud-panel">
+                        <div class="panel-heading">
+                            <span>🛰️ Met-Scan Live Sweep Map</span>
+                            <span id="radarDate" style="color: var(--neon-blue);">Tamil Nadu Coordinates</span>
+                        </div>
+                        <div class="radar-wrapper">
+                            <canvas id="radarMap"></canvas>
+                            <div id="radarTooltip" class="radar-tooltip">
+                                <div style="font-size: 0.65rem; text-transform: uppercase; color: var(--color-muted); margin-bottom: 2px;">Station Telemetry</div>
+                                <h4 id="tooltipName" style="font-size: 0.85rem; font-weight: 800; color: white; margin-bottom: 4px;">District</h4>
+                                <div class="flex gap-4">
+                                    <div>
+                                        <span style="font-size: 0.7rem; color: var(--color-muted);">Observed:</span><br>
+                                        <span id="tooltipVal" style="font-size: 0.85rem; font-weight: 700; color: var(--neon-blue);">0.0 mm</span>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 0.7rem; color: var(--color-muted);">Status:</span><br>
+                                        <span id="tooltipGrade" class="badge" style="margin-top: 1px;">Grade</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ranked Observation list -->
+                    <div class="hud-panel">
+                        <div class="panel-heading">
+                            <span>📊 District Precipitation Ranking</span>
+                        </div>
+                        <div id="observationList" class="scroll-list"></div>
+                    </div>
+
+                </div>
+
+                <!-- Raw Log matrix table -->
+                <div class="hud-panel">
+                    <div class="panel-heading" style="margin-bottom: 10px;">
+                        <span>📋 Observation Log Matrix</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>District Node</th>
+                                    <th style="text-align: right;">Precipitation (mm)</th>
+                                    <th style="text-align: center;">IMD Status Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Leaflet Stations Map View -->
+            <div id="tabMap" class="tab-panel hidden">
+                <div class="hud-panel" style="min-height: 550px;">
+                    <div class="panel-heading">
+                        <span>📍 Rain Gauge Coordinates Mapping</span>
+                        <span style="color: var(--color-muted);">Raw Coordinates Plot</span>
+                    </div>
+                    <div id="leafletMap" style="height: 460px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.08);"></div>
+                </div>
+            </div>
+
+            <!-- Windy Widget View -->
+            <div id="tabRadar" class="tab-panel hidden">
+                <div class="hud-panel">
+                    <div class="panel-heading">
+                        <span>🛰️ Live Weather Radar Tracking (Windy)</span>
+                        <span style="color: var(--neon-blue);">Real-time Atmospheric scan</span>
+                    </div>
+                    <div id="radarIframeContainer"></div>
+                </div>
+            </div>
+
+            <!-- 7-Day Forecast View -->
+            <div id="tabForecast" class="tab-panel hidden">
+                <div class="hud-panel">
+                    <div class="panel-heading">
+                        <span>🔮 7-Day District Weather Forecast</span>
+                        <span id="forecastDistrictDisplay" style="color: var(--neon-blue);">District Select active</span>
+                    </div>
+                    
+                    <div id="weatherCards" class="weather-grid"></div>
+
+                    <div class="section-header-compact" style="margin-top: 30px;">📈 Temperature & Precipitation Trend</div>
+                    <div id="forecastChart" class="w-full"></div>
+                </div>
+            </div>
+
+            <!-- Historical Playback View -->
+            <div id="tabPlayback" class="tab-panel hidden" style="position: relative;">
+                <div id="csvLoaderOverlay" class="db-loader-overlay" style="display: none;">
+                    <div class="spinner"></div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: var(--neon-blue);">Caching Climate Database...</div>
+                    <div style="font-size: 0.72rem; color: var(--color-muted);">Downloading tnRainfallData.csv (39MB)</div>
+                </div>
+
+                <div class="hud-panel" style="min-height: 520px;">
+                    <div class="panel-heading">
+                        <span>⏳ Historical Year-over-Year Playback</span>
+                        <span style="color: var(--color-muted);">1990 - 2026 playback sweep</span>
+                    </div>
+
+                    <div class="playback-controls">
+                        <button id="playbackPlayBtn" class="play-btn" onclick="togglePlayback()">
+                            <i data-lucide="play" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <div class="flex-grow flex flex-col gap-2">
+                            <div class="flex justify-between" style="font-size: 0.72rem; font-weight: 750; color: var(--color-muted);">
+                                <span>Timeline Slider: 1990 - 2026</span>
+                                <span id="playbackYearDisplay" style="color: var(--neon-blue);">Active Year: 2020</span>
+                            </div>
+                            <input id="playbackRange" type="range" min="1990" max="2026" value="2020" step="1" oninput="setPlaybackYear(this.value)" style="width: 100%; cursor: pointer; accent-color: var(--neon-blue); height: 5px; border-radius: 4px;">
+                        </div>
+                    </div>
+
+                    <div id="playbackChart" class="w-full"></div>
+                </div>
+            </div>
+
+            <!-- Comparative Analysis View -->
+            <div id="tabCompare" class="tab-panel hidden" style="position: relative;">
+                <div id="csvLoaderOverlayCompare" class="db-loader-overlay" style="display: none;">
+                    <div class="spinner"></div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: var(--neon-blue);">Caching Climate Database...</div>
+                    <div style="font-size: 0.72rem; color: var(--color-muted);">Downloading tnRainfallData.csv (39MB)</div>
+                </div>
+
+                <div class="hud-panel" style="min-height: 520px;">
+                    <div class="panel-heading">
+                        <span>⚔️ District & Year-over-Year Comparisons</span>
+                        <span style="color: var(--color-muted);">Visual Comparative analytics</span>
+                    </div>
+
+                    <div class="flex gap-3" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 12px;">
+                        <button id="compTypeBtnDist" class="sync-icon-btn" style="width: fit-content; padding: 0 16px; font-size: 0.75rem; font-weight: 750; background: var(--neon-blue);" onclick="toggleComparisonType('district')">Compare Two Districts</button>
+                        <button id="compTypeBtnYear" class="sync-icon-btn" style="width: fit-content; padding: 0 16px; font-size: 0.75rem; font-weight: 750; background: rgba(255,255,255,0.02);" onclick="toggleComparisonType('year')">Compare Two Years</button>
+                    </div>
+
+                    <!-- Filters for District Comparison -->
+                    <div id="compFiltersDist" class="grid grid-cols-4 gap-3" style="margin-bottom: 20px;">
+                        <div class="control-group">
+                            <span class="control-label" style="font-size: 0.65rem;">District A</span>
+                            <select id="compDistA" onchange="runComparison()" class="hud-select" style="width: 100%; text-align: left; padding: 6px 10px;"></select>
+                        </div>
+                        <div class="control-group">
+                            <span class="control-label" style="font-size: 0.65rem;">District B</span>
+                            <select id="compDistB" onchange="runComparison()" class="hud-select" style="width: 100%; text-align: left; padding: 6px 10px;"></select>
+                        </div>
+                        <div class="control-group">
+                            <span class="control-label" style="font-size: 0.65rem;">Select Year</span>
+                            <select id="compYearSelect" onchange="runComparison()" class="hud-select" style="width: 100%; text-align: left; padding: 6px 10px;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Filters for Year-over-Year Single District Comparison -->
+                    <div id="compFiltersYear" class="grid grid-cols-4 gap-3" style="margin-bottom: 20px; display: none;">
+                        <div class="control-group">
+                            <span class="control-label" style="font-size: 0.65rem;">Year A</span>
+                            <select id="compYearA" onchange="runComparison()" class="hud-select" style="width: 100%; text-align: left; padding: 6px 10px;"></select>
+                        </div>
+                        <div class="control-group">
+                            <span class="control-label" style="font-size: 0.65rem;">Year B</span>
+                            <select id="compYearB" onchange="runComparison()" class="hud-select" style="width: 100%; text-align: left; padding: 6px 10px;"></select>
+                        </div>
+                    </div>
+
+                    <div id="comparisonChart" class="w-full"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Leaflet.js script -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Fallback data source (bypasses browser CORS block when opening as a local file:///) -->
+    <script src="./latest_rainfall.js" defer></script>
+
+    <script>
+        // District Geolocation Coordinate Mapping
+        const districtCoordinates = {
+            "Ariyalur": [11.1400, 79.0770], "Chengalpattu": [12.6841, 79.9836], "Chennai": [13.0827, 80.2707],
+            "Coimbatore": [11.0168, 76.9558], "Cuddalore": [11.7480, 79.7714], "Dharmapuri": [12.1275, 78.1582],
+            "Dindigul": [10.3673, 77.9803], "Erode": [11.3410, 77.7172], "Kallakurichi": [11.7384, 78.9639],
+            "Kancheepuram": [12.8387, 79.7016], "Kanniyakumari": [8.1883, 77.4019], "Karur": [10.9601, 78.0766],
+            "Krishnagiri": [12.5266, 78.2147], "Madurai": [9.9252, 78.1198], "Mayiladuthurai": [11.1018, 79.6522],
+            "Nagapattinam": [10.7672, 79.8444], "Namakkal": [11.2189, 78.1674], "Perambalur": [11.2342, 78.8836],
+            "Pudukkottai": [10.3796, 78.8208], "Ramanathapuram": [9.3639, 78.8394], "Ranipet": [12.9272, 79.3328],
+            "Salem": [11.6643, 78.1460], "Sivagangai": [9.8433, 78.4809], "Tenkasi": [8.9592, 77.3138],
+            "Thanjavur": [10.7870, 79.1378], "Theni": [10.0104, 77.4748], "The Nilgiris": [11.4102, 76.6950],
+            "Thiruchirappalli": [10.7905, 78.7047], "Thirupathur": [12.4934, 78.5678], "Thiruvarur": [10.7403, 79.6429],
+            "Tirunelveli": [8.7139, 77.7567], "Tiruppur": [11.1085, 77.3411], "Tiruvallur": [13.1384, 79.9073],
+            "Tiruvannamalai": [12.2253, 79.0747], "Thoothukudi": [8.7642, 78.1348], "Villupuram": [11.9401, 79.4861],
+            "Virudhunagar": [9.5680, 77.9624]
+        };
+
+        const minLat = 7.9, maxLat = 13.9;
+        const minLon = 75.8, maxLon = 80.8;
+
+        // Global SPA Telemetry state
+        let canvas = document.getElementById("radarMap");
+        let ctx = canvas.getContext("2d");
+        let sweepAngle = 0;
+        let activeTelemetry = [];
+        let hoveredNode = null;
+        
+        let leafletMap = null;
+        let leafletMarkers = [];
+        let windyInitialized = false;
+
+        let forecastChart = null;
+        let selectedDistrict = "Chennai";
+
+        // CSV Lazy Load State variables
+        let isCsvLoaded = false;
+        let isCsvLoading = false;
+        let historicalData = [];
+        let activePlaybackYear = 2020;
+        let playbackInterval = null;
+        let playbackChart = null;
+
+        let activeCompareType = 'district';
+        let comparisonChart = null;
+
+        // Scale canvas to pixel density
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        function projectCoords(lat, lon, width, height) {
+            const padding = 30;
+            const mapW = width - (padding * 2);
+            const mapH = height - (padding * 2);
+            const x = padding + ((lon - minLon) / (maxLon - minLon)) * mapW;
+            const y = padding + (mapH - ((lat - minLat) / (maxLat - minLat)) * mapH);
+            return { x, y };
+        }
+
+        function animateRadar() {
+            if (document.getElementById("tabLive").classList.contains("hidden")) {
+                requestAnimationFrame(animateRadar);
+                return;
+            }
+            
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            ctx.clearRect(0, 0, width, height);
+
+            const cx = width / 2;
+            const cy = height / 2;
+            const maxRadius = Math.min(width, height) / 2 - 15;
+
+            ctx.strokeStyle = "rgba(99, 102, 241, 0.08)";
+            ctx.lineWidth = 1;
+            for (let i = 1; i <= 4; i++) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, (maxRadius / 4) * i, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(cx - maxRadius, cy);
+            ctx.lineTo(cx + maxRadius, cy);
+            ctx.moveTo(cx, cy - maxRadius);
+            ctx.lineTo(cx, cy + maxRadius);
+            ctx.stroke();
+
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(sweepAngle);
+            const trailGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, maxRadius);
+            trailGradient.addColorStop(0, "rgba(6, 182, 212, 0.2)");
+            trailGradient.addColorStop(0.8, "rgba(99, 102, 241, 0.04)");
+            trailGradient.addColorStop(1, "transparent");
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, maxRadius, -0.25, 0);
+            ctx.lineTo(0, 0);
+            ctx.fillStyle = trailGradient;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(maxRadius, 0);
+            ctx.strokeStyle = "rgba(6, 182, 212, 0.5)";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+
+            activeTelemetry.forEach(node => {
+                const coords = projectCoords(node.lat, node.lon, width, height);
+                let nodeColor = '#38bdf8';
+                if (node.val > 115.6) nodeColor = '#ef4444';
+                else if (node.val > 64.5) nodeColor = '#f97316';
+                else if (node.val > 15.6) nodeColor = '#eab308';
+                else if (node.val === 0) nodeColor = '#475569';
+
+                if (node.val > 15.6) {
+                    const pulseRadius = 5 + (Math.sin(Date.now() * 0.005 + node.val) * 3);
+                    ctx.beginPath();
+                    ctx.arc(coords.x, coords.y, pulseRadius, 0, Math.PI * 2);
+                    ctx.strokeStyle = nodeColor;
+                    ctx.lineWidth = 1;
+                    ctx.globalAlpha = 0.3;
+                    ctx.stroke();
+                    ctx.globalAlpha = 1.0;
+                }
+
+                ctx.beginPath();
+                ctx.arc(coords.x, coords.y, hoveredNode === node ? 6 : 4, 0, Math.PI * 2);
+                ctx.fillStyle = nodeColor;
+                ctx.shadowColor = nodeColor;
+                ctx.shadowBlur = 8;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            sweepAngle += 0.0075;
+            if (sweepAngle > Math.PI * 2) sweepAngle = 0;
+
+            requestAnimationFrame(animateRadar);
+        }
+
+        canvas.addEventListener("mousemove", (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+
+            let foundNode = null;
+            activeTelemetry.forEach(node => {
+                const coords = projectCoords(node.lat, node.lon, width, height);
+                const distance = Math.hypot(coords.x - mouseX, coords.y - mouseY);
+                if (distance < 10) foundNode = node;
+            });
+
+            if (foundNode) {
+                hoveredNode = foundNode;
+                canvas.style.cursor = "pointer";
+                const tooltip = document.getElementById("radarTooltip");
+                document.getElementById("tooltipName").textContent = foundNode.name;
+                document.getElementById("tooltipVal").textContent = `${foundNode.val.toFixed(1)} mm`;
+                
+                let grade = 'Light Rain', textColor = '#38bdf8', colorClass = 'rgba(56, 189, 248, 0.12)';
+                if (foundNode.val > 115.6) {
+                    grade = 'Very Heavy'; textColor = 'var(--neon-red)'; colorClass = 'rgba(239, 68, 68, 0.12)';
+                } else if (foundNode.val > 64.5) {
+                    grade = 'Heavy Rain'; textColor = 'var(--neon-orange)'; colorClass = 'rgba(249, 115, 22, 0.12)';
+                } else if (foundNode.val > 15.6) {
+                    grade = 'Moderate'; textColor = 'var(--neon-yellow)'; colorClass = 'rgba(234, 179, 8, 0.12)';
+                } else if (foundNode.val === 0) {
+                    grade = 'No Rain'; textColor = 'var(--color-muted)'; colorClass = 'rgba(255, 255, 255, 0.03)';
+                }
+
+                const badge = document.getElementById("tooltipGrade");
+                badge.textContent = grade;
+                badge.style.backgroundColor = colorClass;
+                badge.style.color = textColor;
+                badge.style.border = `1px solid ${textColor}`;
+
+                tooltip.style.display = "block";
+            } else {
+                hoveredNode = null;
+                canvas.style.cursor = "default";
+                document.getElementById("radarTooltip").style.display = "none";
+            }
+        });
+
+        // Tab routing switcher
+        function switchTab(tabId, el) {
+            document.querySelectorAll(".tab-panel").forEach(p => p.classList.add("hidden"));
+            document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
+            
+            document.getElementById(tabId).classList.remove("hidden");
+            el.classList.add("active");
+            
+            document.getElementById("sidebar").classList.remove("active");
+
+            // Context-specific actions
+            if (tabId === 'tabMap') {
+                initLeafletMap();
+                if (leafletMap) {
+                    setTimeout(() => leafletMap.invalidateSize(), 150);
+                }
+            }
+            if (tabId === 'tabRadar') initWindyIframe();
+            if (tabId === 'tabForecast') {
+                document.getElementById("sidebarFilters").style.display = "flex";
+                runForecast();
+            } else {
+                document.getElementById("sidebarFilters").style.display = "none";
+            }
+            if (tabId === 'tabPlayback') {
+                ensureCsvLoaded('csvLoaderOverlay');
+            }
+            if (tabId === 'tabCompare') {
+                ensureCsvLoaded('csvLoaderOverlayCompare');
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("active");
+        }
+
+        async function ensureCsvLoaded(overlayId) {
+            if (isCsvLoaded) {
+                if (overlayId === 'csvLoaderOverlay') initializeHistoricalView();
+                if (overlayId === 'csvLoaderOverlayCompare') initializeComparisonView();
+                return;
+            }
+            if (isCsvLoading) return;
+            isCsvLoading = true;
+
+            const loader = document.getElementById(overlayId);
+            loader.style.display = "flex";
+
+            try {
+                const response = await fetch('./tnRainfallData.csv');
+                if (!response.ok) throw new Error("CSV database file not found.");
+                const text = await response.text();
+
+                Papa.parse(text, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        historicalData = results.data;
+                        isCsvLoaded = true;
+                        isCsvLoading = false;
+                        document.getElementById("csvLoaderOverlay").style.display = "none";
+                        document.getElementById("csvLoaderOverlayCompare").style.display = "none";
+                        
+                        if (overlayId === 'csvLoaderOverlay') initializeHistoricalView();
+                        if (overlayId === 'csvLoaderOverlayCompare') initializeComparisonView();
+                    }
+                });
+            } catch (err) {
+                console.error("CSV load error:", err);
+                isCsvLoading = false;
+                loader.style.display = "none";
+                alert("Failed to load historical climate database. Ensure tnRainfallData.csv is relative to index.html.");
+            }
+        }
+
+        // Load today's observations snapshot
+        async function loadData() {
+            try {
+                const listContainer = document.getElementById("observationList");
+                listContainer.innerHTML = "";
+                for (let i = 0; i < 6; i++) {
+                    listContainer.innerHTML += `<div class="skeleton h-20 rounded-xl" style="height: 60px; width: 100%; border-radius: 10px; margin-bottom: 10px;"></div>`;
+                }
+
+                let data;
+                if (typeof latestRainfallData !== 'undefined') {
+                    data = latestRainfallData;
+                } else {
+                    const res = await fetch('./latest_rainfall.json');
+                    if (!res.ok) throw new Error("Snapshot not found.");
+                    data = await res.json();
+                }
+
+                document.getElementById("loadingGrid").style.display = "none";
+                document.getElementById("kpiGrid").style.display = "grid";
+
+                renderDashboard(data);
+                populateSidebarFilters(data);
+            } catch (err) {
+                console.error("Live fetch failed: ", err);
+                alert("Alert: Failed to read latest observation telemetry database.");
+            }
+        }
+
+        function reloadData() {
+            loadData();
+            if (isCsvLoaded) {
+                isCsvLoaded = false;
+                ensureCsvLoaded(document.getElementById("tabPlayback").classList.contains("hidden") ? 'csvLoaderOverlayCompare' : 'csvLoaderOverlay');
+            }
+        }
+
+        function populateSidebarFilters(data) {
+            const select = document.getElementById("sidebarDistSelect");
+            select.innerHTML = "";
+            const districts = Object.keys(data.district_breakdown).sort();
+            districts.forEach(d => {
+                select.innerHTML += `<option value="${d}" ${d === selectedDistrict ? 'selected' : ''}>${d.substring(0,3)}</option>`;
+            });
+        }
+
+        function onDistrictChange(val) {
+            selectedDistrict = val;
+            if (!document.getElementById("tabForecast").classList.contains("hidden")) {
+                runForecast();
+            }
+        }
+
+        function renderDashboard(data) {
+            document.getElementById("statTotal").textContent = `${data.total_rainfall_mm.toLocaleString()} mm`;
+            document.getElementById("statAvg").textContent = `${data.average_rainfall_mm.toFixed(2)} mm`;
+            document.getElementById("statTopDist").textContent = data.top_district.name;
+            document.getElementById("statTopDistVal").textContent = `${data.top_district.value_mm.toFixed(1)} mm`;
+            document.getElementById("statTopStation").textContent = data.top_station.name;
+            document.getElementById("statTopStationVal").textContent = `${data.top_station.value_mm.toFixed(1)} mm`;
+
+            document.getElementById("hudDate").textContent = `Sweep observation on: ${data.observation_date}`;
+
+            // Canvas radar telemetry mapping
+            activeTelemetry = [];
+            const districtsList = Object.entries(data.district_breakdown)
+                .map(([name, val]) => ({ name, val }))
+                .sort((a, b) => b.val - a.val);
+
+            districtsList.forEach(d => {
+                const coords = districtCoordinates[d.name];
+                if (coords) {
+                    activeTelemetry.push({
+                        name: d.name, val: d.val, lat: coords[0], lon: coords[1]
+                    });
+                }
+            });
+
+            // Observations bars list
+            const listContainer = document.getElementById("observationList");
+            listContainer.innerHTML = "";
+            const maxVal = districtsList[0].val || 1.0;
+
+            districtsList.forEach(d => {
+                const percent = (d.val / maxVal) * 100;
+                let barColor = 'linear-gradient(90deg, #38bdf8, #06b6d4)';
+                if (d.val > 115.6) barColor = 'linear-gradient(90deg, #f87171, #ef4444)';
+                else if (d.val > 64.5) barColor = 'linear-gradient(90deg, #fb923c, #f97316)';
+                else if (d.val > 15.6) barColor = 'linear-gradient(90deg, #fde047, #eab308)';
+
+                listContainer.innerHTML += `
+                    <div class="obs-item">
+                        <div class="obs-header">
+                            <span class="obs-name">${d.name}</span>
+                            <span class="obs-val">${d.val.toFixed(1)} mm</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percent}%; background: ${barColor};"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Log table
+            const tableBody = document.getElementById("logTableBody");
+            tableBody.innerHTML = "";
+            districtsList.forEach(d => {
+                let statusText = 'Light Drizzle', badgeStyle = 'background: rgba(56, 189, 248, 0.06); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2);';
+                if (d.val > 115.6) {
+                    statusText = 'Very Heavy'; badgeStyle = 'background: rgba(239, 68, 68, 0.06); color: var(--neon-red); border: 1px solid rgba(239, 68, 68, 0.2);';
+                } else if (d.val > 64.5) {
+                    statusText = 'Heavy Rain'; badgeStyle = 'background: rgba(249, 115, 22, 0.06); color: var(--neon-orange); border: 1px solid rgba(249, 115, 22, 0.2);';
+                } else if (d.val > 15.6) {
+                    statusText = 'Moderate'; badgeStyle = 'background: rgba(234, 179, 8, 0.06); color: var(--neon-yellow); border: 1px solid rgba(234, 179, 8, 0.2);';
+                } else if (d.val === 0) {
+                    statusText = 'Dry Node'; badgeStyle = 'background: rgba(255, 255, 255, 0.02); color: var(--color-muted); border: 1px solid rgba(255, 255, 255, 0.05);';
+                }
+
+                tableBody.innerHTML += `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                        <td style="font-weight: 700; color: white;">${d.name}</td>
+                        <td style="text-align: right; font-weight: 600;">${d.val.toFixed(1)} mm</td>
+                        <td style="text-align: center;">
+                            <span class="badge" style="${badgeStyle}">${statusText}</span>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Initialize Leaflet Stations map (Tab 2)
+        function initLeafletMap() {
+            if (leafletMap) return;
+            leafletMap = L.map('leafletMap', {zoomControl: false}).setView([11.1271, 78.6569], 7);
+            L.control.zoom({ position: 'topright' }).addTo(leafletMap);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(leafletMap);
+
+            fetch('./raingauge_stations.csv')
+                .then(res => res.text())
+                .then(text => {
+                    Papa.parse(text, {
+                        header: true,
+                        dynamicTyping: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            results.data.forEach(station => {
+                                const lat = station.Latitude || station.latitude;
+                                const lon = station.Longitude || station.longitude;
+                                const name = station["Name of the station"] || station.name;
+                                if (lat && lon) {
+                                    const m = L.circleMarker([lat, lon], {
+                                        radius: 3.5,
+                                        fillColor: '#06b6d4',
+                                        color: '#6366f1',
+                                        weight: 1,
+                                        fillOpacity: 0.7
+                                    }).addTo(leafletMap);
+                                    m.bindPopup(`
+                                        <div style="font-family:'Plus Jakarta Sans',sans-serif;color:#1e293b;">
+                                            <strong>${name}</strong><br>
+                                            <span style="font-size:11px;">Status: Working</span>
+                                        </div>
+                                    `);
+                                }
+                            });
+                        }
+                    });
+                });
+        }
+
+        // Initialize Windy Widget (Tab 3)
+        function initWindyIframe() {
+            if (windyInitialized) return;
+            const container = document.getElementById("radarIframeContainer");
+            container.innerHTML = `
+                <iframe 
+                    width="100%" 
+                    height="450" 
+                    src="https://embed.windy.com/embed2.html?lat=11.1271&lon=78.6569&zoom=6&level=surface&overlay=radar&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=11.1271&detailLon=78.6569&metricWind=default&metricTemp=default&radarRange=-1" 
+                    frameborder="0"
+                    style="border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 14px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);"
+                ></iframe>
+            `;
+            windyInitialized = true;
+        }
+
+        // Translate WMO Weather Code to Description and Emoji
+        function getWmoDesc(code) {
+            const wmoCodes = {
+                0: ["Clear sky", "☀️"],
+                1: ["Mainly clear", "🌤️"],
+                2: ["Partly cloudy", "⛅"],
+                3: ["Overcast", "☁️"],
+                45: ["Foggy", "🌫️"],
+                48: ["Depositing rime fog", "🌫️"],
+                51: ["Light drizzle", "🌦️"],
+                53: ["Moderate drizzle", "🌦️"],
+                55: ["Dense drizzle", "🌦️"],
+                56: ["Light freezing drizzle", "🌨️"],
+                57: ["Dense freezing drizzle", "🌨️"],
+                61: ["Slight rain", "🌧️"],
+                63: ["Moderate rain", "🌧️"],
+                65: ["Heavy rain", "🌧️"],
+                66: ["Light freezing rain", "🌨️"],
+                67: ["Heavy freezing rain", "🌨️"],
+                71: ["Slight snow fall", "❄️"],
+                73: ["Moderate snow fall", "❄️"],
+                75: ["Heavy snow fall", "❄️"],
+                77: ["Snow grains", "❄️"],
+                80: ["Slight rain showers", "🌦️"],
+                81: ["Moderate rain showers", "🌦️"],
+                82: ["Violent rain showers", "⛈️"],
+                85: ["Slight snow showers", "❄️"],
+                86: ["Heavy snow showers", "❄️"],
+                95: ["Thunderstorm", "⛈️"],
+                96: ["Thunderstorm with slight hail", "⛈️"],
+                99: ["Thunderstorm with heavy hail", "⛈️"]
+            };
+            return wmoCodes[code] || ["Unspecified weather", "🌡️"];
+        }
+
+        // Open-Meteo Weather Forecast (Tab 4)
+        async function runForecast() {
+            document.getElementById("forecastDistrictDisplay").textContent = `District: ${selectedDistrict}`;
+            const coords = districtCoordinates[selectedDistrict] || [11.1271, 78.6569];
+            
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords[0]}&longitude=${coords[1]}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=Asia%2FKolkata`;
+            
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error("Forecast fetch failed.");
+                const forecastData = await res.json();
+                
+                renderForecast(forecastData);
+            } catch (err) {
+                console.error("Forecast Error: ", err);
+                document.getElementById("weatherCards").innerHTML = `<div style="grid-column: 1/-1; color: var(--neon-red); text-align:center; padding: 20px;">Failed to fetch live weather forecast.</div>`;
+            }
+        }
+
+        function renderForecast(data) {
+            const daily = data.daily;
+            const dates = daily.time;
+            const maxTemps = daily.temperature_2m_max;
+            const minTemps = daily.temperature_2m_min;
+            const precip = daily.precipitation_sum;
+            const prob = daily.precipitation_probability_max;
+            const codes = daily.weathercode;
+
+            const container = document.getElementById("weatherCards");
+            container.innerHTML = "";
+
+            dates.forEach((dateStr, i) => {
+                const parts = dateStr.split("-");
+                const dt = new Date(parts[0], parts[1]-1, parts[2]);
+                const dayName = dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                const [desc, emoji] = getWmoDesc(codes[i]);
+
+                container.innerHTML += `
+                    <div class="weather-card">
+                        <div class="weather-date">${dayName}</div>
+                        <div class="weather-emoji">${emoji}</div>
+                        <div class="weather-desc">${desc}</div>
+                        <div class="weather-temp">${maxTemps[i].toFixed(1)}° / ${minTemps[i].toFixed(1)}°</div>
+                        <div class="weather-rain">🌧️ ${precip[i].toFixed(1)}mm (${prob[i]}%)</div>
+                    </div>
+                `;
+            });
+
+            const chartCategories = dates.map(d => {
+                const parts = d.split("-");
+                const dt = new Date(parts[0], parts[1]-1, parts[2]);
+                return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            });
+
+            const options = {
+                series: [{
+                    name: 'Rain (mm)',
+                    type: 'column',
+                    data: precip
+                }, {
+                    name: 'Max Temp (°C)',
+                    type: 'line',
+                    data: maxTemps
+                }, {
+                    name: 'Min Temp (°C)',
+                    type: 'line',
+                    data: minTemps
+                }],
+                chart: {
+                    height: 280,
+                    type: 'line',
+                    foreColor: '#94a3b8',
+                    toolbar: { show: false }
+                },
+                stroke: {
+                    width: [0, 2.5, 2.5],
+                    curve: 'smooth'
+                },
+                plotOptions: {
+                    bar: { columnWidth: '35%', borderRadius: 3 }
+                },
+                colors: ['#06b6d4', '#fbbf24', '#60a5fa'],
+                grid: { borderColor: 'rgba(255, 255, 255, 0.05)' },
+                xaxis: { categories: chartCategories },
+                yaxis: [{
+                    title: { text: 'Rain (mm)', style: { color: '#06b6d4', fontSize: '9px' } }
+                }, {
+                    opposite: true,
+                    title: { text: 'Temp (°C)', style: { color: '#fbbf24', fontSize: '9px' } }
+                }],
+                tooltip: { theme: 'dark' }
+            };
+
+            if (forecastChart) forecastChart.destroy();
+            forecastChart = new ApexCharts(document.querySelector("#forecastChart"), options);
+            forecastChart.render();
+        }
+
+        // Historical Playback tab (Tab 5)
+        function initializeHistoricalView() {
+            setPlaybackYear(activePlaybackYear);
+        }
+
+        function setPlaybackYear(val) {
+            activePlaybackYear = parseInt(val);
+            document.getElementById("playbackRange").value = activePlaybackYear;
+            document.getElementById("playbackYearDisplay").textContent = `Active Year: ${activePlaybackYear}`;
+            
+            const yearData = historicalData.filter(row => {
+                if (!row.date) return false;
+                const year = new Date(row.date).getFullYear();
+                return year === activePlaybackYear && row.dist !== 'All';
+            });
+
+            const sums = {};
+            yearData.forEach(row => {
+                sums[row.dist] = (sums[row.dist] || 0) + (row.value || 0);
+            });
+
+            const sortedList = Object.entries(sums)
+                .map(([name, value]) => ({ name, value }))
+                .sort((a,b) => b.value - a.value);
+
+            const chartCategories = sortedList.map(s => s.name);
+            const chartValues = sortedList.map(s => parseFloat(s.value.toFixed(1)));
+
+            const options = {
+                series: [{
+                    name: 'Cumulative Precipitation',
+                    data: chartValues
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 380,
+                    foreColor: '#94a3b8',
+                    toolbar: { show: false },
+                    animations: { enabled: false }
+                },
+                plotOptions: {
+                    bar: { horizontal: true, barHeight: '70%', distributed: true, borderRadius: 3 }
+                },
+                colors: ['#8b5cf6'],
+                grid: { borderColor: 'rgba(255,255,255,0.05)' },
+                xaxis: { categories: chartCategories, labels: { show: true } },
+                legend: { show: false },
+                tooltip: { theme: 'dark' }
+            };
+
+            if (playbackChart) playbackChart.destroy();
+            playbackChart = new ApexCharts(document.querySelector("#playbackChart"), options);
+            playbackChart.render();
+        }
+
+        function togglePlayback() {
+            const btn = document.getElementById("playbackPlayBtn");
+            if (playbackInterval) {
+                clearInterval(playbackInterval);
+                playbackInterval = null;
+                btn.innerHTML = `<i data-lucide="play" style="width: 16px; height: 16px;"></i>`;
+                lucide.createIcons();
+            } else {
+                btn.innerHTML = `<i data-lucide="pause" style="width: 16px; height: 16px;"></i>`;
+                lucide.createIcons();
+                playbackInterval = setInterval(() => {
+                    activePlaybackYear += 1;
+                    if (activePlaybackYear > 2026) activePlaybackYear = 1990;
+                    setPlaybackYear(activePlaybackYear);
+                }, 1200);
+            }
+        }
+
+        // Comparative Analytics tab (Tab 6)
+        function initializeComparisonView() {
+            const districts = [...new Set(historicalData.map(r => r.dist))].filter(d => d && d !== 'All').sort();
+            const years = [...new Set(historicalData.map(r => r.date ? new Date(r.date).getFullYear() : null))].filter(y => y).sort();
+
+            const distA = document.getElementById("compDistA");
+            const distB = document.getElementById("compDistB");
+            const yearSelect = document.getElementById("compYearSelect");
+            const yearA = document.getElementById("compYearA");
+            const yearB = document.getElementById("compYearB");
+
+            distA.innerHTML = ""; distB.innerHTML = ""; yearSelect.innerHTML = ""; yearA.innerHTML = ""; yearB.innerHTML = "";
+
+            districts.forEach(d => {
+                distA.innerHTML += `<option value="${d}">${d}</option>`;
+                distB.innerHTML += `<option value="${d}" ${d === districts[min(1, districts.length-1)] ? 'selected' : ''}>${d}</option>`;
+            });
+            function min(a, b) { return a < b ? a : b; }
+
+            years.forEach(y => {
+                yearSelect.innerHTML += `<option value="${y}" ${y === years[years.length-1] ? 'selected' : ''}>${y}</option>`;
+                yearA.innerHTML += `<option value="${y}" ${y === years[max(0, years.length-2)] ? 'selected' : ''}>${y}</option>`;
+                yearB.innerHTML += `<option value="${y}" ${y === years[years.length-1] ? 'selected' : ''}>${y}</option>`;
+            });
+            function max(a, b) { return a > b ? a : b; }
+
+            runComparison();
+        }
+
+        function toggleComparisonType(type) {
+            activeCompareType = type;
+            const btnDist = document.getElementById("compTypeBtnDist");
+            const btnYear = document.getElementById("compTypeBtnYear");
+            const filterDist = document.getElementById("compFiltersDist");
+            const filterYear = document.getElementById("compFiltersYear");
+
+            if (type === 'district') {
+                btnDist.style.backgroundColor = 'var(--neon-blue)';
+                btnYear.style.backgroundColor = 'rgba(255,255,255,0.02)';
+                filterDist.style.display = 'grid';
+                filterYear.style.display = 'none';
+            } else {
+                btnDist.style.backgroundColor = 'rgba(255,255,255,0.02)';
+                btnYear.style.backgroundColor = 'var(--neon-blue)';
+                filterDist.style.display = 'none';
+                filterYear.style.display = 'grid';
+            }
+            runComparison();
+        }
+
+        function runComparison() {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            
+            if (activeCompareType === 'district') {
+                const distAVal = document.getElementById("compDistA").value;
+                const distBVal = document.getElementById("compDistB").value;
+                const yearVal = parseInt(document.getElementById("compYearSelect").value);
+
+                const subset = historicalData.filter(r => r.date && new Date(r.date).getFullYear() === yearVal);
+                const sumsA = Array(12).fill(0);
+                const sumsB = Array(12).fill(0);
+
+                subset.forEach(row => {
+                    const dt = new Date(row.date);
+                    const month = dt.getMonth();
+                    if (row.dist === distAVal) sumsA[month] += (row.value || 0);
+                    if (row.dist === distBVal) sumsB[month] += (row.value || 0);
+                });
+
+                const options = {
+                    series: [{ name: distAVal, data: sumsA.map(v => parseFloat(v.toFixed(1))) }, { name: distBVal, data: sumsB.map(v => parseFloat(v.toFixed(1))) }],
+                    chart: { height: 380, type: 'line', foreColor: '#94a3b8', toolbar: { show: false } },
+                    colors: ['#06b6d4', '#a78bfa'],
+                    stroke: { curve: 'smooth', width: 3 },
+                    grid: { borderColor: 'rgba(255,255,255,0.05)' },
+                    xaxis: { categories: monthNames },
+                    tooltip: { theme: 'dark' }
+                };
+
+                if (comparisonChart) comparisonChart.destroy();
+                comparisonChart = new ApexCharts(document.querySelector("#comparisonChart"), options);
+                comparisonChart.render();
+
+            } else {
+                const distVal = document.getElementById("sidebarDistSelect").value;
+                const yearAVal = parseInt(document.getElementById("compYearA").value);
+                const yearBVal = parseInt(document.getElementById("compYearB").value);
+
+                const subset = historicalData.filter(r => r.dist === distVal);
+                const sumsA = Array(12).fill(0);
+                const sumsB = Array(12).fill(0);
+
+                subset.forEach(row => {
+                    if (!row.date) return;
+                    const dt = new Date(row.date);
+                    const year = dt.getFullYear();
+                    const month = dt.getMonth();
+                    if (year === yearAVal) sumsA[month] += (row.value || 0);
+                    if (year === yearBVal) sumsB[month] += (row.value || 0);
+                });
+
+                const options = {
+                    series: [{ name: `${yearAVal} (${distVal})`, data: sumsA.map(v => parseFloat(v.toFixed(1))) }, { name: `${yearBVal} (${distVal})`, data: sumsB.map(v => parseFloat(v.toFixed(1))) }],
+                    chart: { height: 380, type: 'line', foreColor: '#94a3b8', toolbar: { show: false } },
+                    colors: ['#fbbf24', '#06b6d4'],
+                    stroke: { curve: 'smooth', width: 3 },
+                    grid: { borderColor: 'rgba(255,255,255,0.05)' },
+                    xaxis: { categories: monthNames },
+                    tooltip: { theme: 'dark' }
+                };
+
+                if (comparisonChart) comparisonChart.destroy();
+                comparisonChart = new ApexCharts(document.querySelector("#comparisonChart"), options);
+                comparisonChart.render();
+            }
+        }
+
+        // Start initialization sequence
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            resizeCanvas();
+            window.addEventListener('resize', () => resizeCanvas());
+
+            animateRadar();
+            loadData();
+        });
+    </script>
+</body>
+</html>
