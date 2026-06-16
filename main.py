@@ -76,60 +76,6 @@ def run_daily_sync(csv_path="tnRainfallData.csv"):
         Total_Rain_Fall_Data.to_csv(csv_path)
         print("Data saved to tnRainfallData.csv")
 
-        # Export today's summary to JSON for API hosting
-        try:
-            latest_date_str = Total_Rain_Fall_Data['date'].max()
-            today_df = Total_Rain_Fall_Data[Total_Rain_Fall_Data['date'] == latest_date_str]
-            
-            if not today_df.empty:
-                total_val = float(today_df['value'].sum())
-                avg_val = float(today_df['value'].mean())
-                
-                dist_grouped = today_df.groupby('dist')['value'].sum()
-                top_dist = dist_grouped.idxmax() if not dist_grouped.empty else "None"
-                top_dist_val = float(dist_grouped.max()) if not dist_grouped.empty else 0.0
-                
-                # Ensure we handle multiple identical max index gracefully
-                idx_max = today_df['value'].idxmax()
-                max_row = today_df.loc[idx_max] if pd.notna(idx_max) else None
-                if isinstance(max_row, pd.DataFrame):
-                    max_row = max_row.iloc[0]
-                top_station = max_row['station'] if max_row is not None else "None"
-                top_station_val = float(max_row['value']) if max_row is not None else 0.0
-                
-                dist_breakdown = dist_grouped.round(2).to_dict()
-                
-                json_summary = {
-                    "last_updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    "observation_date": latest_date_str,
-                    "total_rainfall_mm": round(total_val, 2),
-                    "average_rainfall_mm": round(avg_val, 2),
-                    "top_district": {
-                        "name": top_dist,
-                        "value_mm": round(top_dist_val, 2)
-                    },
-                    "top_station": {
-                        "name": top_station,
-                        "value_mm": round(top_station_val, 2)
-                    },
-                    "district_breakdown": dist_breakdown
-                }
-                
-                import json
-                dir_name = os.path.dirname(csv_path)
-                json_path = os.path.join(dir_name, "latest_rainfall.json")
-                with open(json_path, "w") as f:
-                    json.dump(json_summary, f, indent=4)
-                print("Latest rainfall data exported to latest_rainfall.json")
-
-                # Export as JavaScript variable to bypass browser CORS file:// restrictions
-                js_path = os.path.join(dir_name, "latest_rainfall.js")
-                with open(js_path, "w") as f:
-                    f.write(f"const latestRainfallData = {json.dumps(json_summary, indent=4)};")
-                print("Latest rainfall data exported to latest_rainfall.js")
-        except Exception as e_json:
-            print(f"Warning: Failed to generate latest_rainfall.json: {str(e_json)}")
-
         return True, status_msg
     except Exception as e:
         return False, f"Exception occurred: {str(e)}"
