@@ -6,3 +6,6 @@ seaborn
 matplotlib
 streamlit
 plotly
+fpdf2
+folium
+streamlit-folium

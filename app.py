@@ -6,6 +6,11 @@ import os
 import requests
 import streamlit.components.v1 as components
 import pydeck as pdk
+import numpy as np
+from fpdf import FPDF
+import folium
+from folium.plugins import HeatMap
+from streamlit_folium import st_folium
 from main import run_daily_sync
 
 # Set up page configurations
@@ -54,6 +59,99 @@ def get_weather_desc(code):
         99: ("Thunderstorm with heavy hail", "⚡"),
     }
     return mapping.get(code, ("Unknown", "🌡️"))
+
+class PDFReport(FPDF):
+    def header(self):
+        # Custom elegant header background
+        self.set_fill_color(15, 23, 42)  # Slate-900 style
+        self.rect(0, 0, 210, 35, 'F')
+        
+        self.set_text_color(255, 255, 255)
+        self.set_font('Helvetica', 'B', 14)
+        self.cell(0, 12, 'TAMIL NADU RAINFALL OBSERVATION REPORT', border=0, ln=1, align='C')
+        self.set_font('Helvetica', 'I', 9)
+        self.cell(0, 4, 'Automated Rainfall Telemetry & Historical Analytics Dashboard Output', border=0, ln=1, align='C')
+        self.ln(12)
+        
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Helvetica', 'I', 8)
+        self.set_text_color(148, 163, 184)
+        self.cell(0, 10, f'Page {self.page_no()}/{{nb}} | Generated on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}', border=0, ln=0, align='C')
+
+def generate_pdf_report(filtered_df, selected_districts, start_date, end_date):
+    pdf = PDFReport()
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_font('Helvetica', '', 10)
+    pdf.set_text_color(15, 23, 42)
+    
+    # Report configuration
+    pdf.set_font('Helvetica', 'B', 12)
+    pdf.cell(0, 8, 'Report Configuration Parameters', ln=1)
+    pdf.set_font('Helvetica', '', 10)
+    pdf.cell(0, 6, f'Date Range: {start_date} to {end_date}', ln=1)
+    
+    districts_str = ", ".join(selected_districts) if len(selected_districts) <= 6 else f"{len(selected_districts)} districts selected"
+    pdf.cell(0, 6, f'Selected Districts: {districts_str}', ln=1)
+    pdf.ln(5)
+    
+    if not filtered_df.empty:
+        total_rainfall = filtered_df['value'].sum()
+        rainy_days = filtered_df['date'].nunique()
+        avg_daily_rain = total_rainfall / rainy_days if rainy_days > 0 else 0
+        dist_grouped = filtered_df.groupby('dist')['value'].sum()
+        top_district = dist_grouped.idxmax() if not dist_grouped.empty else "None"
+        top_dist_val = dist_grouped.max() if not dist_grouped.empty else 0.0
+        
+        # KPI summary
+        pdf.set_font('Helvetica', 'B', 12)
+        pdf.cell(0, 8, 'Key Observation Metrics Summary', ln=1)
+        pdf.set_font('Helvetica', '', 10)
+        
+        pdf.set_fill_color(241, 245, 249)
+        pdf.cell(95, 7, ' Metric Parameter', 1, 0, 'L', True)
+        pdf.cell(95, 7, ' Measured Observation', 1, 1, 'L', True)
+        
+        pdf.cell(95, 7, ' Cumulative Swept Precipitation', 1, 0, 'L')
+        pdf.cell(95, 7, f' {total_rainfall:,.1f} mm', 1, 1, 'L')
+        
+        pdf.cell(95, 7, ' Average Daily Intensity', 1, 0, 'L')
+        pdf.cell(95, 7, f' {avg_daily_rain:.2f} mm', 1, 1, 'L')
+        
+        pdf.cell(95, 7, ' Total Observation Range', 1, 0, 'L')
+        pdf.cell(95, 7, f' {rainy_days:,} days', 1, 1, 'L')
+        
+        pdf.cell(95, 7, ' Peak District Accumulation', 1, 0, 'L')
+        pdf.cell(95, 7, f' {top_district} ({top_dist_val:,.1f} mm)', 1, 1, 'L')
+        
+        pdf.ln(5)
+        
+        # District breakdowns
+        pdf.set_font('Helvetica', 'B', 12)
+        pdf.cell(0, 8, 'District Accumulation Standings', ln=1)
+        
+        pdf.set_fill_color(30, 41, 59)
+        pdf.set_text_color(255, 255, 255)
+        pdf.cell(95, 7, ' District Name', 1, 0, 'L', True)
+        pdf.cell(95, 7, ' Cumulative Rainfall (mm)', 1, 1, 'R', True)
+        
+        pdf.set_text_color(15, 23, 42)
+        pdf.set_font('Helvetica', '', 10)
+        
+        sorted_dist = dist_grouped.reset_index().sort_values(by='value', ascending=False)
+        for index, row in sorted_dist.head(22).iterrows():
+            pdf.cell(95, 6, f" {row['dist']}", 1, 0, 'L')
+            pdf.cell(95, 6, f" {row['value']:,.1f} mm ", 1, 1, 'R')
+            
+        if len(sorted_dist) > 22:
+            pdf.ln(2)
+            pdf.set_font('Helvetica', 'I', 9)
+            pdf.cell(0, 6, f'... and {len(sorted_dist) - 22} other districts detailed in the active dashboard filters.', ln=1, align='L')
+    else:
+        pdf.cell(0, 10, 'No active observations compiled for selected criteria.', ln=1)
+        
+    return pdf.output()
 
 # Initialize session states
 if "syncing" not in st.session_state:
@@ -525,6 +623,21 @@ filtered_df = df[
     (df['date'] <= pd.to_datetime(end_date))
 ]
 
+# PDF Report Generator Sidebar Control
+st.sidebar.markdown("---")
+st.sidebar.subheader("📄 Report Export")
+try:
+    pdf_data = generate_pdf_report(filtered_df, selected_dist, start_date, end_date)
+    st.sidebar.download_button(
+        label="📥 Download Weather Report (PDF)",
+        data=bytes(pdf_data),
+        file_name=f"TN_Rainfall_Report_{start_date}_to_{end_date}.pdf",
+        mime="application/pdf",
+        use_container_width=True
+    )
+except Exception as e_pdf:
+    st.sidebar.error(f"Failed to compile PDF: {str(e_pdf)}")
+
 # Animated Raindrops Header Generation
 raindrops_html = "".join([
     f'<div class="header-raindrop" style="left: {i*7}%; animation-delay: {i*0.13:.2f}s; animation-duration: {0.7 + (i % 3)*0.15:.2f}s;"></div>'
@@ -839,7 +952,12 @@ with tab_map:
         st.markdown(f"Displaying spatial coordinates for **{len(df_stations_clean):,}** rain gauge stations across Tamil Nadu (Raw Coordinates).")
         st.map(df_stations_clean, color="#6366f1", size=15)
     else:
-        map_mode = st.radio("Select Map Style Mode", ["3D Column Deck (Pydeck)", "Flat Marker Map (Plotly Mapbox)"], horizontal=True, key="map_style_toggle")
+        map_mode = st.radio(
+            "Select Map Style Mode", 
+            ["3D Column Deck (Pydeck)", "Precipitation Density Heatmap (Folium)", "Flat Marker Map (Plotly Mapbox)"], 
+            horizontal=True, 
+            key="map_style_toggle"
+        )
         
         if map_mode == "3D Column Deck (Pydeck)":
             st.markdown(f"Displaying average observed rainfall in 3D across **{len(map_data):,}** mapped gauge stations in Tamil Nadu.")
@@ -858,6 +976,7 @@ with tab_map:
                     return [239, 68, 68, 220]  # Red
             
             map_data['fill_color'] = map_data['value'].apply(calculate_color)
+            map_data['formatted_value'] = map_data['value'].apply(lambda x: f"{x:.1f}")
             
             # Dynamic height scale based on max observed rainfall
             max_val = map_data['value'].max() if not map_data['value'].empty else 1.0
@@ -873,6 +992,7 @@ with tab_map:
                 get_fill_color="fill_color",
                 pickable=True,
                 auto_highlight=True,
+                extruded=True,
             )
             
             view_state = pdk.ViewState(
@@ -891,7 +1011,7 @@ with tab_map:
                     "html": "<div style='font-family: \"Plus Jakarta Sans\", sans-serif; font-size: 12px;'>"
                             "<b>Station:</b> {Name of the station}<br/>"
                             "<b>District:</b> {District/Taluk/Revenue Village}<br/>"
-                            "<b>Avg Rainfall:</b> {value:.1f} mm"
+                            "<b>Avg Rainfall:</b> {formatted_value} mm"
                             "</div>",
                     "style": {
                         "backgroundColor": "#0f172a",
@@ -903,6 +1023,37 @@ with tab_map:
                 }
             )
             st.pydeck_chart(deck_map)
+            
+        elif map_mode == "Precipitation Density Heatmap (Folium)":
+            st.markdown("Displaying continuous rainfall hotspots using Folium HeatMap aggregation overlay.")
+            
+            # Initialize folium dark-matter map centered in TN
+            m = folium.Map(
+                location=[11.1271, 78.6569], 
+                zoom_start=7, 
+                tiles="CartoDB dark_matter",
+                control_scale=True
+            )
+            
+            # Pull coordinates and rainfall average values
+            heat_df = map_data[['latitude', 'longitude', 'value']].dropna()
+            
+            # Populate HeatMap structure: list of [lat, lon, weight]
+            heat_list = heat_df.values.tolist()
+            
+            if heat_list:
+                HeatMap(
+                    data=heat_list, 
+                    radius=22, 
+                    blur=15, 
+                    max_zoom=10, 
+                    min_opacity=0.35,
+                    gradient={0.4: '#06b6d4', 0.65: '#6366f1', 0.85: '#f97316', 1.0: '#ef4444'}
+                ).addTo(m)
+            
+            # Render using st_folium with constrained reload state objects
+            st_folium(m, height=600, width=1200, returned_objects=[])
+            
         else:
             st.markdown(f"Displaying average observed rainfall dynamically across **{len(map_data):,}** mapped gauge stations in Tamil Nadu.")
             
@@ -1077,6 +1228,133 @@ with tab_forecast:
         st.plotly_chart(fig_forecast, use_container_width=True)
     else:
         st.error("Failed to load forecast data from Open-Meteo. Please check your internet connection.")
+
+    # Time-Series Seasonal Forecasting Section
+    st.markdown('<div class="section-header">🔮 12-Month Climatological Trend Forecast</div>', unsafe_allow_html=True)
+    st.markdown(f"Generating monthly forecasting projections for **{primary_dist}** based on historical trends since 1990.")
+    
+    # Filter historical data for primary_dist
+    dist_history = df[df['dist'] == primary_dist].copy()
+    if not dist_history.empty:
+        dist_history['year'] = dist_history['date'].dt.year
+        dist_history['month'] = dist_history['date'].dt.month
+        
+        # Aggregate monthly totals by year
+        monthly_totals = dist_history.groupby(['year', 'month'])['value'].sum().reset_index()
+        
+        # Fit a linear trend for each month separately to capture both seasonality and long-term trend
+        future_months = []
+        forecast_vals = []
+        lower_bounds = []
+        upper_bounds = []
+        
+        # Let's project for the next 12 months starting from next month
+        current_year = datetime.datetime.now().year
+        current_month = datetime.datetime.now().month
+        
+        month_names = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+        
+        for i in range(1, 13):
+            proj_month = (current_month + i - 1) % 12 + 1
+            proj_year = current_year + (current_month + i - 1) // 12
+            
+            # Select historical values for this specific month
+            hist_month_data = monthly_totals[monthly_totals['month'] == proj_month]
+            
+            if len(hist_month_data) > 2:
+                # Fit linear regression: Y = A * Year + B
+                X = hist_month_data['year'].values
+                Y = hist_month_data['value'].values
+                
+                # Fit trend line coefficients
+                coef = np.polyfit(X, Y, 1)
+                poly1d_fn = np.poly1d(coef)
+                
+                # Predict for future year
+                pred = float(poly1d_fn(proj_year))
+                if pred < 0:
+                    pred = 0.0 # rainfall cannot be negative
+                
+                # Standard deviation of residuals for confidence bounds
+                residuals = Y - poly1d_fn(X)
+                std_err = np.std(residuals)
+                
+                # 95% Confidence Interval: margin of error = 1.96 * std_err
+                margin = 1.96 * std_err
+                
+                lower = max(0.0, pred - margin)
+                upper = pred + margin
+            else:
+                # Fallback to simple mean if data is sparse
+                pred = float(hist_month_data['value'].mean()) if not hist_month_data.empty else 0.0
+                lower = max(0.0, pred - 10)
+                upper = pred + 10
+                
+            future_months.append(f"{month_names[proj_month]} {proj_year}")
+            forecast_vals.append(pred)
+            lower_bounds.append(lower)
+            upper_bounds.append(upper)
+            
+        # Compile forecast dataframe
+        forecast_df = pd.DataFrame({
+            "Month": future_months,
+            "Forecast (mm)": forecast_vals,
+            "Lower Bound (95% CI)": lower_bounds,
+            "Upper Bound (95% CI)": upper_bounds
+        })
+        
+        # Render dynamic Plotly line + shaded area chart
+        import plotly.graph_objects as go
+        fig_fore = go.Figure()
+        
+        # Add shaded confidence interval area
+        fig_fore.add_trace(go.Scatter(
+            x=forecast_df["Month"].tolist() + forecast_df["Month"].tolist()[::-1],
+            y=forecast_df["Upper Bound (95% CI)"].tolist() + forecast_df["Lower Bound (95% CI)"].tolist()[::-1],
+            fill='toself',
+            fillcolor='rgba(6, 182, 212, 0.12)',
+            line=dict(color='rgba(255,255,255,0)'),
+            hoverinfo="skip",
+            showlegend=True,
+            name="95% Confidence Bounds"
+        ))
+        
+        # Add primary forecast line
+        fig_fore.add_trace(go.Scatter(
+            x=forecast_df["Month"],
+            y=forecast_df["Forecast (mm)"],
+            mode='lines+markers',
+            name="Seasonal Trend Forecast",
+            line=dict(color="#06b6d4", width=3),
+            marker=dict(size=7, color="#a855f7")
+        ))
+        
+        fig_fore.update_layout(
+            title=f"Rainfall Projection & Confidence Limits: {primary_dist} (Next 12 Months)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)"),
+            yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)", title="Precipitation (mm)"),
+            font=dict(family="Plus Jakarta Sans"),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        st.plotly_chart(fig_fore, use_container_width=True)
+        
+        # Forecast Summary Metrics
+        st.markdown(f"**Forecasting Highlights for {primary_dist}**:")
+        col_f1, col_f2, col_f3 = st.columns(3)
+        with col_f1:
+            max_idx = np.argmax(forecast_vals)
+            st.metric(label="Peak Forecasted Month", value=future_months[max_idx], delta=f"{forecast_vals[max_idx]:.1f} mm")
+        with col_f2:
+            min_idx = np.argmin(forecast_vals)
+            st.metric(label="Driest Forecasted Month", value=future_months[min_idx], delta=f"{forecast_vals[min_idx]:.1f} mm")
+        with col_f3:
+            total_proj = sum(forecast_vals)
+            st.metric(label="Estimated 12-Month Total", value=f"{total_proj:,.1f} mm")
+            
+    else:
+        st.warning("No historical observations available for forecasting in this district.")
 
 with tab_compare:
     st.markdown('<div class="section-header">⚔️ District & Year-over-Year Comparisons</div>', unsafe_allow_html=True)
