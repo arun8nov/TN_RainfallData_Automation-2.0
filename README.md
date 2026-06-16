@@ -99,10 +99,8 @@ streamlit run app.py
 ## ETL Diagram
 ![ETL Process](ETL.png)
 
-## 🖼️ Streamlit Dashboard Screenshot
-![Dashboard Sample](appsample.png)
 
-### Live Streamlit Link: https://arun8nov-tn-rainfalldata-automation-app-zbsxu0.streamlit.app/
+### Live Streamlit Link: https://tnrainfalldata.streamlit.app/
 
 ---
 Author: **Arunprakash B**
