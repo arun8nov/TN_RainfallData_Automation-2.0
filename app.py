@@ -5,6 +5,7 @@ import plotly.express as px
 import os
 import requests
 import streamlit.components.v1 as components
+import pydeck as pdk
 from main import run_daily_sync
 
 # Set up page configurations
@@ -543,13 +544,14 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # Layout Setup using tabs
-tab_metrics, tab_timeline, tab_map, tab_radar, tab_forecast, tab_compare = st.tabs([
+tab_metrics, tab_timeline, tab_map, tab_radar, tab_forecast, tab_compare, tab_monsoon = st.tabs([
     "📊 Live Analytics & KPI Metrics",
     "⏳ Historical Year-over-Year Playback",
     "📍 Rain Gauge Station Coordinates Map",
     "🛰️ Live Weather Radar (Windy)",
     "🔮 7-Day District Forecast",
-    "⚔️ Comparative Analysis"
+    "⚔️ Comparative Analysis",
+    "🌦️ Monsoon Seasons Tracker"
 ])
 
 with tab_metrics:
@@ -837,33 +839,98 @@ with tab_map:
         st.markdown(f"Displaying spatial coordinates for **{len(df_stations_clean):,}** rain gauge stations across Tamil Nadu (Raw Coordinates).")
         st.map(df_stations_clean, color="#6366f1", size=15)
     else:
-        st.markdown(f"Displaying average observed rainfall dynamically across **{len(map_data):,}** mapped gauge stations in Tamil Nadu.")
+        map_mode = st.radio("Select Map Style Mode", ["3D Column Deck (Pydeck)", "Flat Marker Map (Plotly Mapbox)"], horizontal=True, key="map_style_toggle")
         
-        # Interactive Plotly Open-Street-Map
-        fig_map = px.scatter_mapbox(
-            map_data,
-            lat="latitude",
-            lon="longitude",
-            color="value",
-            size="value",
-            hover_name="Name of the station",
-            hover_data={"latitude": False, "longitude": False, "value": True},
-            color_continuous_scale="Turbo",
-            size_max=16,
-            zoom=6,
-            center=dict(lat=11.1271, lon=78.6569),
-            mapbox_style="open-street-map",
-            template="plotly_dark",
-            height=600
-        )
-        
-        fig_map.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(family="Plus Jakarta Sans"),
-            margin=dict(l=0, r=0, t=10, b=0)
-        )
-        st.plotly_chart(fig_map, use_container_width=True)
+        if map_mode == "3D Column Deck (Pydeck)":
+            st.markdown(f"Displaying average observed rainfall in 3D across **{len(map_data):,}** mapped gauge stations in Tamil Nadu.")
+            
+            # Setup colors: cyan/blue for low, purple/indigo for moderate, orange/red for heavy
+            def calculate_color(val):
+                if val == 0:
+                    return [71, 85, 105, 120]  # Slate grey
+                elif val < 15.6:
+                    return [56, 189, 248, 160] # Cyan
+                elif val < 64.5:
+                    return [99, 102, 241, 180] # Indigo
+                elif val < 115.6:
+                    return [249, 115, 22, 200] # Orange
+                else:
+                    return [239, 68, 68, 220]  # Red
+            
+            map_data['fill_color'] = map_data['value'].apply(calculate_color)
+            
+            # Dynamic height scale based on max observed rainfall
+            max_val = map_data['value'].max() if not map_data['value'].empty else 1.0
+            map_data['elevation'] = (map_data['value'] / max_val) * 20000 + 1000  # elevation in meters
+            
+            column_layer = pdk.Layer(
+                "ColumnLayer",
+                data=map_data,
+                get_position=["longitude", "latitude"],
+                get_elevation="elevation",
+                elevation_scale=1,
+                radius=3200,
+                get_fill_color="fill_color",
+                pickable=True,
+                auto_highlight=True,
+            )
+            
+            view_state = pdk.ViewState(
+                latitude=11.1271,
+                longitude=78.6569,
+                zoom=6.3,
+                pitch=48,
+                bearing=-12
+            )
+            
+            deck_map = pdk.Deck(
+                layers=[column_layer],
+                initial_view_state=view_state,
+                map_style=pdk.map_styles.CARTO_DARK,
+                tooltip={
+                    "html": "<div style='font-family: \"Plus Jakarta Sans\", sans-serif; font-size: 12px;'>"
+                            "<b>Station:</b> {Name of the station}<br/>"
+                            "<b>District:</b> {District/Taluk/Revenue Village}<br/>"
+                            "<b>Avg Rainfall:</b> {value:.1f} mm"
+                            "</div>",
+                    "style": {
+                        "backgroundColor": "#0f172a",
+                        "color": "#f8fafc",
+                        "border": "1px solid rgba(99, 102, 241, 0.3)",
+                        "borderRadius": "8px",
+                        "padding": "10px"
+                    }
+                }
+            )
+            st.pydeck_chart(deck_map)
+        else:
+            st.markdown(f"Displaying average observed rainfall dynamically across **{len(map_data):,}** mapped gauge stations in Tamil Nadu.")
+            
+            # Interactive Plotly Open-Street-Map
+            fig_map = px.scatter_mapbox(
+                map_data,
+                lat="latitude",
+                lon="longitude",
+                color="value",
+                size="value",
+                hover_name="Name of the station",
+                hover_data={"latitude": False, "longitude": False, "value": True},
+                color_continuous_scale="Turbo",
+                size_max=16,
+                zoom=6.1,
+                center=dict(lat=11.1271, lon=78.6569),
+                mapbox_style="open-street-map",
+                template="plotly_dark",
+                height=600
+            )
+            
+            fig_map.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(family="Plus Jakarta Sans"),
+                margin=dict(l=0, r=0, t=10, b=0)
+            )
+            st.plotly_chart(fig_map, use_container_width=True)
 
 with tab_radar:
     st.markdown('<div class="section-header">🛰️ Live Weather Radar Tracking (Windy)</div>', unsafe_allow_html=True)
@@ -1098,3 +1165,105 @@ with tab_compare:
             font=dict(family="Plus Jakarta Sans")
         )
         st.plotly_chart(fig_yoy, use_container_width=True)
+
+with tab_monsoon:
+    st.markdown('<div class="section-header">🌦️ Southwest & Northeast Monsoon Seasons Tracker</div>', unsafe_allow_html=True)
+    st.markdown("Track and compare Tamil Nadu's two major annual monsoon seasons: Southwest Monsoon (June–Sept) vs. Northeast Monsoon (Oct–Dec) since 1990.")
+
+    # District Selection for Monsoon Tracking
+    monsoon_dist = st.selectbox("Select District for Monsoon Analysis", options=["All Districts"] + unique_districts, index=0)
+    
+    # Filter dataset for analysis
+    if monsoon_dist == "All Districts":
+        m_df = df.copy()
+    else:
+        m_df = df[df['dist'] == monsoon_dist].copy()
+    
+    if not m_df.empty:
+        m_df['year'] = m_df['date'].dt.year
+        m_df['month'] = m_df['date'].dt.month
+        
+        # Segment monsoons
+        # Southwest Monsoon: June(6), July(7), Aug(8), Sept(9)
+        sw_df = m_df[m_df['month'].isin([6, 7, 8, 9])]
+        # Northeast Monsoon: Oct(10), Nov(11), Dec(12)
+        ne_df = m_df[m_df['month'].isin([10, 11, 12])]
+        
+        # Aggregations YoY
+        sw_yoy = sw_df.groupby('year')['value'].sum().reset_index().rename(columns={'value': 'Southwest Monsoon (Jun-Sep)'})
+        ne_yoy = ne_df.groupby('year')['value'].sum().reset_index().rename(columns={'value': 'Northeast Monsoon (Oct-Dec)'})
+        
+        # Merge YoY datasets
+        monsoon_merged = pd.merge(sw_yoy, ne_yoy, on='year', how='outer').fillna(0).sort_values(by='year')
+        
+        # Calculate normal (historical average) baselines
+        sw_normal = float(sw_yoy['Southwest Monsoon (Jun-Sep)'].mean()) if not sw_yoy.empty else 0.0
+        ne_normal = float(ne_yoy['Northeast Monsoon (Oct-Dec)'].mean()) if not ne_yoy.empty else 0.0
+        
+        # Anomaly highlights for selected year
+        available_years = sorted(monsoon_merged['year'].unique())
+        if available_years:
+            selected_m_year = st.slider("Select Year to Inspect Anomaly", min_value=int(min(available_years)), max_value=int(max(available_years)), value=int(max(available_years)))
+            
+            # Fetch values for selected year
+            year_data = monsoon_merged[monsoon_merged['year'] == selected_m_year]
+            if not year_data.empty:
+                sw_val = float(year_data['Southwest Monsoon (Jun-Sep)'].values[0])
+                ne_val = float(year_data['Northeast Monsoon (Oct-Dec)'].values[0])
+                
+                # Anomaly percentages
+                sw_pct = ((sw_val - sw_normal) / sw_normal * 100) if sw_normal > 0 else 0.0
+                ne_pct = ((ne_val - ne_normal) / ne_normal * 100) if ne_normal > 0 else 0.0
+                
+                col_m1, col_m2 = st.columns(2)
+                with col_m1:
+                    # Southwest metric card
+                    status_sw = "🔼 Above Normal" if sw_pct >= 0 else "🔽 Below Normal"
+                    color_sw = "#10b981" if sw_pct >= 0 else "#ef4444"
+                    st.markdown(f"""
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 16px; border: 1px solid rgba(99, 102, 241, 0.15); text-align: center;">
+                        <h4 style="margin: 0; color: #94a3b8; font-size: 13px; text-transform: uppercase;">Southwest Monsoon ({selected_m_year})</h4>
+                        <div style="font-size: 28px; font-weight: 700; color: white; margin: 10px 0;">{sw_val:.1f} mm</div>
+                        <div style="font-size: 13px; color: {color_sw}; font-weight: 600;">{status_sw} ({sw_pct:+.1f}%)</div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Historical baseline normal: {sw_normal:.1f} mm</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with col_m2:
+                    # Northeast metric card
+                    status_ne = "🔼 Above Normal" if ne_pct >= 0 else "🔽 Below Normal"
+                    color_ne = "#10b981" if ne_pct >= 0 else "#ef4444"
+                    st.markdown(f"""
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 16px; border: 1px solid rgba(99, 102, 241, 0.15); text-align: center;">
+                        <h4 style="margin: 0; color: #94a3b8; font-size: 13px; text-transform: uppercase;">Northeast Monsoon ({selected_m_year})</h4>
+                        <div style="font-size: 28px; font-weight: 700; color: white; margin: 10px 0;">{ne_val:.1f} mm</div>
+                        <div style="font-size: 13px; color: {color_ne}; font-weight: 600;">{status_ne} ({ne_pct:+.1f}%)</div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Historical baseline normal: {ne_normal:.1f} mm</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+        
+        # Visual trend chart
+        st.markdown('<div class="section-header">📈 Annual Monsoon Totals YoY Trend</div>', unsafe_allow_html=True)
+        fig_monsoon = px.line(
+            monsoon_merged,
+            x='year',
+            y=['Southwest Monsoon (Jun-Sep)', 'Northeast Monsoon (Oct-Dec)'],
+            title=f"Monsoon Rainfall Trends (1990 - Present) - {monsoon_dist}",
+            labels={"value": "Total Rain (mm)", "year": "Year", "variable": "Monsoon Season"},
+            template="plotly_dark",
+            markers=True
+        )
+        # Add normal horizontal lines as references
+        fig_monsoon.add_hline(y=sw_normal, line_dash="dash", line_color="#38bdf8", annotation_text="SW Normal Baseline")
+        fig_monsoon.add_hline(y=ne_normal, line_dash="dash", line_color="#818cf8", annotation_text="NE Normal Baseline")
+        
+        fig_monsoon.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)"),
+            yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)"),
+            font=dict(family="Plus Jakarta Sans"),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        st.plotly_chart(fig_monsoon, use_container_width=True)
+    else:
+        st.warning("No historical records available for monsoon analysis.")
