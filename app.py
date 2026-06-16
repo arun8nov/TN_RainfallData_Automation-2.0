@@ -7,6 +7,7 @@ import requests
 import streamlit.components.v1 as components
 import pydeck as pdk
 import numpy as np
+import io
 from fpdf import FPDF
 import folium
 from folium.plugins import HeatMap
@@ -79,7 +80,7 @@ class PDFReport(FPDF):
         self.set_text_color(148, 163, 184)
         self.cell(0, 10, f'Page {self.page_no()}/{{nb}} | Generated on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}', border=0, ln=0, align='C')
 
-def generate_pdf_report(filtered_df, selected_districts, start_date, end_date):
+def generate_pdf_report(filtered_df, selected_districts, start_date, end_date, fig_trend=None):
     pdf = PDFReport()
     pdf.alias_nb_pages()
     pdf.add_page()
@@ -148,6 +149,22 @@ def generate_pdf_report(filtered_df, selected_districts, start_date, end_date):
             pdf.ln(2)
             pdf.set_font('Helvetica', 'I', 9)
             pdf.cell(0, 6, f'... and {len(sorted_dist) - 22} other districts detailed in the active dashboard filters.', ln=1, align='L')
+            
+        # Draw dynamic Plotly trends on a new page if provided
+        if fig_trend is not None:
+            try:
+                pdf.add_page()
+                pdf.set_font('Helvetica', 'B', 12)
+                pdf.cell(0, 10, 'Visual Climatological Daily Trends', ln=1)
+                pdf.ln(2)
+                
+                # Convert Plotly graph to PNG bytes via Kaleido engine
+                img_bytes = fig_trend.to_image(format="png", width=700, height=350)
+                pdf.image(io.BytesIO(img_bytes), x=10, y=pdf.get_y(), w=190)
+            except Exception as e_img:
+                pdf.ln(5)
+                pdf.set_font('Helvetica', 'I', 9)
+                pdf.cell(0, 6, f'Warning: Could not render graphical chart in PDF: {str(e_img)}', ln=1)
     else:
         pdf.cell(0, 10, 'No active observations compiled for selected criteria.', ln=1)
         
@@ -623,11 +640,33 @@ filtered_df = df[
     (df['date'] <= pd.to_datetime(end_date))
 ]
 
+# Pre-calculate daily trend chart for dashboard and PDF report
+fig_time = None
+if not filtered_df.empty:
+    daily_trend = filtered_df.groupby('date')['value'].mean().reset_index()
+    fig_time = px.line(
+        daily_trend,
+        x="date",
+        y="value",
+        labels={"date": "Date", "value": "Average Rain (mm)"},
+        template="plotly_dark"
+    )
+    fig_time.update_traces(line=dict(color="#06b6d4", width=2))
+    fig_time.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)"),
+        yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)"),
+        height=350,
+        margin=dict(l=20, r=20, t=10, b=20),
+        font=dict(family="Plus Jakarta Sans")
+    )
+
 # PDF Report Generator Sidebar Control
 st.sidebar.markdown("---")
 st.sidebar.subheader("📄 Report Export")
 try:
-    pdf_data = generate_pdf_report(filtered_df, selected_dist, start_date, end_date)
+    pdf_data = generate_pdf_report(filtered_df, selected_dist, start_date, end_date, fig_trend=fig_time)
     st.sidebar.download_button(
         label="📥 Download Weather Report (PDF)",
         data=bytes(pdf_data),
@@ -657,14 +696,15 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # Layout Setup using tabs
-tab_metrics, tab_timeline, tab_map, tab_radar, tab_forecast, tab_compare, tab_monsoon = st.tabs([
+tab_metrics, tab_timeline, tab_map, tab_radar, tab_forecast, tab_compare, tab_monsoon, tab_anomaly = st.tabs([
     "📊 Live Analytics & KPI Metrics",
     "⏳ Historical Year-over-Year Playback",
     "📍 Rain Gauge Station Coordinates Map",
     "🛰️ Live Weather Radar (Windy)",
     "🔮 7-Day District Forecast",
     "⚔️ Comparative Analysis",
-    "🌦️ Monsoon Seasons Tracker"
+    "🌦️ Monsoon Seasons Tracker",
+    "⛈️ Climate Anomalies & Drought"
 ])
 
 with tab_metrics:
@@ -855,25 +895,8 @@ with tab_metrics:
 
         # Daily rainfall line trend
         st.markdown('<div class="section-header">🌧️ Daily Average Rainfall Over Time</div>', unsafe_allow_html=True)
-        daily_trend = filtered_df.groupby('date')['value'].mean().reset_index()
-        fig_time = px.line(
-            daily_trend,
-            x="date",
-            y="value",
-            labels={"date": "Date", "value": "Average Rain (mm)"},
-            template="plotly_dark"
-        )
-        fig_time.update_traces(line=dict(color="#06b6d4", width=2))
-        fig_time.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)"),
-            yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)"),
-            height=350,
-            margin=dict(l=20, r=20, t=10, b=20),
-            font=dict(family="Plus Jakarta Sans")
-        )
-        st.plotly_chart(fig_time, use_container_width=True)
+        if fig_time is not None:
+            st.plotly_chart(fig_time, use_container_width=True)
 
 with tab_timeline:
     st.markdown('<div class="section-header">⏳ Historical Year-over-Year Playback</div>', unsafe_allow_html=True)
@@ -1545,3 +1568,111 @@ with tab_monsoon:
         st.plotly_chart(fig_monsoon, use_container_width=True)
     else:
         st.warning("No historical records available for monsoon analysis.")
+
+with tab_anomaly:
+    st.markdown('<div class="section-header">⛈️ Standardized Precipitation Climate Anomalies</div>', unsafe_allow_html=True)
+    st.markdown("Monitor multi-decade surplus and drought patterns using Standardized Precipitation Anomalies based on historical climate baseline normals.")
+    
+    # Selection options
+    anomaly_dist = st.selectbox("Select District for Anomaly Sweep", options=["All Districts"] + unique_districts, index=0, key="anomaly_dist_select")
+    
+    # Filter dataset for analysis
+    if anomaly_dist == "All Districts":
+        a_df = df.copy()
+    else:
+        a_df = df[df['dist'] == anomaly_dist].copy()
+        
+    if not a_df.empty:
+        a_df['year'] = a_df['date'].dt.year
+        
+        # Calculate yearly sum totals
+        yearly_sums = a_df.groupby('year')['value'].sum().reset_index()
+        
+        # Compute mean (normal) and standard deviation of yearly precipitation
+        mean_rain = float(yearly_sums['value'].mean())
+        std_rain = float(yearly_sums['value'].std())
+        
+        if std_rain > 0:
+            # Anomaly index calculation Z = (X - mean) / std
+            yearly_sums['anomaly_index'] = (yearly_sums['value'] - mean_rain) / std_rain
+            
+            # Classification
+            def classify_anomaly(z):
+                if z >= 1.5:
+                    return 'Extremely Wet'
+                elif z >= 0.5:
+                    return 'Moderately Wet'
+                elif z > -0.5:
+                    return 'Near Normal'
+                elif z > -1.5:
+                    return 'Moderate Drought'
+                else:
+                    return 'Severe Drought'
+                    
+            yearly_sums['classification'] = yearly_sums['anomaly_index'].apply(classify_anomaly)
+            
+            # Colors mapping for anomaly bar rendering: Dark Red for severe drought, Orange for moderate drought, Gray for normal, Blue for surplus
+            color_map = {
+                'Extremely Wet': '#2563eb',   # Deep blue
+                'Moderately Wet': '#38bdf8',  # Light blue
+                'Near Normal': '#64748b',     # Slate gray
+                'Moderate Drought': '#f97316',# Orange
+                'Severe Drought': '#ef4444'   # Red
+            }
+            
+            yearly_sums['color'] = yearly_sums['classification'].map(color_map)
+            
+            # Render interactive anomaly bar chart
+            fig_anomaly = px.bar(
+                yearly_sums,
+                x='year',
+                y='anomaly_index',
+                color='classification',
+                color_discrete_map=color_map,
+                title=f"Standardized Climate Anomalies (1990 - Present) - {anomaly_dist}",
+                labels={"anomaly_index": "Anomaly Index (Z-Score)", "year": "Year", "classification": "Climate State"},
+                template="plotly_dark"
+            )
+            
+            fig_anomaly.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)", dtick=2),
+                yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.05)", title="Standardized Anomaly (Z-Score)"),
+                font=dict(family="Plus Jakarta Sans"),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            )
+            st.plotly_chart(fig_anomaly, use_container_width=True)
+            
+            # Historical Stats Summary Cards
+            st.markdown('<div class="section-header">📊 Climate Baseline Records</div>', unsafe_allow_html=True)
+            col_a1, col_a2, col_a3 = st.columns(3)
+            with col_a1:
+                st.metric(label="Historical Normal Baseline", value=f"{mean_rain:,.1f} mm")
+            with col_a2:
+                # Year with maximum surplus
+                max_row = yearly_sums.loc[yearly_sums['anomaly_index'].idxmax()]
+                st.metric(label="Wettest Year Record", value=str(int(max_row['year'])), delta=f"{max_row['value']:,.1f} mm")
+            with col_a3:
+                # Year with maximum drought
+                min_row = yearly_sums.loc[yearly_sums['anomaly_index'].idxmin()]
+                st.metric(label="Driest Year Record", value=str(int(min_row['year'])), delta=f"{min_row['value']:,.1f} mm")
+                
+            # Class distributions details
+            st.markdown("**Historical Anomaly Class Distributions (Number of years)**:")
+            class_counts = yearly_sums['classification'].value_counts()
+            
+            col_c1, col_c2, col_c3, col_c4, col_c5 = st.columns(5)
+            for col_obj, c_name in zip([col_c1, col_c2, col_c3, col_c4, col_c5], ['Extremely Wet', 'Moderately Wet', 'Near Normal', 'Moderate Drought', 'Severe Drought']):
+                count = int(class_counts.get(c_name, 0))
+                c_color = color_map[c_name]
+                col_obj.markdown(f"""
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 12px; border-radius: 12px; border-top: 3px solid {c_color}; text-align: center;">
+                    <span style="font-size: 11px; color: #94a3b8; text-transform: uppercase;">{c_name}</span>
+                    <div style="font-size: 24px; font-weight: 700; color: white; margin-top: 4px;">{count} yrs</div>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("Insufficient variance in observations to model standardization scales.")
+    else:
+        st.warning("No historical dataset loaded to process anomalies.")
