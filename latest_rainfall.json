@@ -1,0 +1,33 @@
+{
+    "last_updated": "2026-06-16 07:29:48",
+    "observation_date": "2026-06-16",
+    "total_rainfall_mm": 413.7,
+    "average_rainfall_mm": 6.46,
+    "top_district": {
+        "name": "Chennai",
+        "value_mm": 74.4
+    },
+    "top_station": {
+        "name": "Cheyyar",
+        "value_mm": 44.2
+    },
+    "district_breakdown": {
+        "Ariyalur": 41.0,
+        "Chengalpattu": 9.0,
+        "Chennai": 74.4,
+        "Coimbatore": 25.0,
+        "Cuddalore": 5.0,
+        "Erode": 16.8,
+        "Kancheepuram": 18.6,
+        "Perambalur": 9.0,
+        "Pudukkottai": 2.0,
+        "Ranipet": 30.2,
+        "Thanjavur": 12.0,
+        "Thiruchirappalli": 30.9,
+        "Thiruvarur": 2.4,
+        "Tiruppur": 17.0,
+        "Tiruvallur": 24.0,
+        "Tiruvannamalai": 49.6,
+        "Villupuram": 46.8
+    }
+}
